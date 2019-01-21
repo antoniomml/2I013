@@ -10,18 +10,26 @@ class EstrategiaSimple(Strategy):
 		# id_player starts at 0
 		posJug = state.player_state(id_team,id_player).position
 		posBal = state.ball.position
-		if (posJug.distance(posBal) > 1.65:
+
+		But1 = Vector2D(0,90/2.)
+		But2 = Vector2D(150,90/2.)
+
+		if posJug.distance(posBal) > 1.65:
 			return SoccerAction(posBal-posJug, posBal-posJug)
 		else:
-			return SoccerAction(Vector2D(1.,0.), Vector2D(1.,0.))
+			if id_team == 1:
+				return SoccerAction(But2-posJug,But2-posJug)
+			else:
+				return SoccerAction(But1-posJug, But1-posJug)
 
 # Create teams
 team1 = SoccerTeam(name="Real Madrid")
 team2 = SoccerTeam(name="Barcelona")
 
 # Add players
-team1.add("Jugador Simple", EstrategiaSimple())  # Random strategy
+team1.add("Jugador Simple", EstrategiaSimple())  # Simple strategy
 team2.add("Jugador Estatico", Strategy())   # Static strategy
+#team2.add("Jugador Simple", EstrategiaSimple())
 
 # Create a match
 simu = Simulation(team1, team2)
