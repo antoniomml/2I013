@@ -6,6 +6,7 @@ https://github.com/sangnier/Soccer
 ```
 
 ##Instalacion Python3:
+```
 Windows:
 ```
 https://www.python.org/downloads/
