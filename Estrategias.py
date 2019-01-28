@@ -19,8 +19,28 @@ class EstrategiaTirador(Strategy):
 
 	def compute_strategy(self, state, id_team, id_player):
 		s = SuperState(state,id_team,id_player)
-
-		if s.player.distance(s.ball) > s.ballDistance:
-			return ir_a(s.ball,s)
-		else:
+		if can_shoot(s):
 			return chutar(s)
+		else:
+			return ir_a(s.ball,s)
+
+#Estrategia Simple (para prueba de acciones)
+class EstrategiaSimple(Strategy):
+    def __init__(self):
+        Strategy.__init__(self, "Simple")
+
+    def compute_strategy(self, state, id_team, id_player):
+        s = SuperState(state,id_team,id_player)
+        return ir_a(Vector2D(15.,17.),s)
+
+#Estrategia de Portero
+class Portero(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"Portero")
+    
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        if can_shoot(s):
+            return chutar(s)
+        else:
+            return ir_a(s.posPortero,s)
