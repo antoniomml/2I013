@@ -1,11 +1,10 @@
 # UE 2I013 - Projet Foot - Sorbonne Université
 
 ## Repositorio programa:
-```
-https://github.com/sangnier/Soccer
-```
 
-##Instalacion Python3:
+https://github.com/sangnier/Soccer
+
+##Instalacion Python:
 
 Windows:
 ```
