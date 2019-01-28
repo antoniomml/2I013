@@ -41,6 +41,6 @@ class Portero(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if can_shoot(s):
-            return chutar(s)
+            return pasar(s)
         else:
             return ir_a(s.posPortero,s)

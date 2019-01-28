@@ -9,9 +9,11 @@ team2 = SoccerTeam(name="Barcelona")
 
 # Creacion de jugadores
 team1.add("Delantero 1", EstrategiaTirador())
+team1.add("Quieto 1", Strategy())
 team1.add("Portero 1", Portero())
 
 team2.add("Delantero 2", EstrategiaTirador())
+team2.add("Quieto 2", Strategy())
 team2.add("Portero 2", Portero())
 
 # Creacion del partido
