@@ -25,9 +25,30 @@ class SuperState(object):
     @property
     def ballDistance(self):
         return PLAYER_RADIUS+BALL_RADIUS
+    
+    @property
+    def posPortero(self):
+        if self.id_team == 1:
+            if self.ball.y > 60.:
+                return Vector2D(5.,60.)
+            if self.ball.y < 30.:
+                return Vector2D(5.,30.)
+            return Vector2D(10.,self.ball.y)
+        if self.id_team == 2:
+            if self.ball.y > 60.:
+                return Vector2D(GAME_WIDTH-5.,60.)
+            if self.ball.y < 30.:
+                return Vector2D(GAME_WIDTH-5.,30.)
+            return Vector2D(GAME_WIDTH-10.,self.ball.y)
 
 def ir_a(punto,superestado):
     return SoccerAction(punto-superestado.player,0.)
 
 def chutar(superestado):
     return SoccerAction(0.,superestado.goal-superestado.player)
+
+def can_shoot(superestado):
+    if superestado.player.distance(superestado.ball) > superestado.ballDistance:
+        return False
+    else:
+        return True
