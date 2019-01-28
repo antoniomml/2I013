@@ -4,7 +4,7 @@
 
 https://github.com/sangnier/Soccer
 
-##Instalacion python3:
+## Instalacion Python3:
 
 Windows:
 ```
