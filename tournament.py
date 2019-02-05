@@ -1,4 +1,4 @@
-from Estrategias import *
+from module.Estrategias import *
 from soccersimulator import SoccerTeam
 
 def get_team ( nb_players ):

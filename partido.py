@@ -1,6 +1,5 @@
-# coding: utf-8
 from soccersimulator import SoccerTeam, Simulation, show_simu
-from Estrategias import *
+from module.Estrategias import *
 
 # Creacion de equipos
 team1 = SoccerTeam(name="Real Madrid")
