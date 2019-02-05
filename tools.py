@@ -56,6 +56,15 @@ class SuperState(object):
                 liste.append(idplayer)
         return liste
 
+    @property
+    def liste_mates(self):
+        liste = []
+        for idteam, idplayer in self.state.players:
+            if idteam == self.id_team:
+                liste.append(idplayer)
+        return liste
+    
+
 def ir_a(punto,superestado):
     v = punto-superestado.player
     vnorm = v.normalize()*maxPlayerAcceleration
@@ -73,19 +82,23 @@ def can_shoot(superestado):
         return True
 
 def adversaireplusproche(idplayer,s):
-    minimo = s.state.player_state(s.enemy_team,0)
+    advcercano = s.state.player_state(s.enemy_team,0)
     for i in range(1,len(s.liste_enemy)):
         if s.state.players[i][0] != s.id_team:
             if s.state.player_state(s.id_team,idplayer).position.distance(s.state.player_state(s.enemy_team,i).position) < s.state.player_state(s.id_team,idplayer).position.distance(minimo.position):
-                minimo = s.state.player_state(s.enemy_team,i)
-    return minimo
+                advcercano = s.state.player_state(s.enemy_team,i)
+    return advcercano
+
+def distanceadvproche(idplayer,s):
+    adv = adversaireplusproche(idplayer,s)
+    return s.state.player_state(s.id_team,idplayer).position.distance(adv.position)
 
 def teammatealone(s):
-    massolo = adversaireplusproche(0,s)
-    for i in range(1,len(s.liste_enemy)):
-        if s.player.distance(adversaireplusproche(i,s).position) < s.player.distance(massolo.position):
-            massolo = adversaireplusproche(i,s)
-    return massolo
+    idsolo = 0
+    for i in range(1,len(s.liste_mates)):
+        if distanceadvproche(i,s) > distanceadvproche(idsolo,s): #?
+            idsolo = i
+    return s.state.player_state(s.id_team,idsolo)
 
 def pasar(superestado):
     p = teammatealone(superestado).position-superestado.player
