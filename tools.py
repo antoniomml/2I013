@@ -7,26 +7,33 @@ class SuperState(object):
         self.id_team = id_team
         self.id_player = id_player
     
-    @property
+    @property #Posicion de la pelota
     def ball(self):
         return self.state.ball.position
 
-    @property
+    @property #Posicion del jugador que ejecuta la estrategia
     def player(self):
         return self.state.player_state(self.id_team,self.id_player).position
 
-    @property
+    @property #Posicion de la porteria contraria
     def goal(self):
         if self.id_team == 1:
             return Vector2D(GAME_WIDTH,GAME_HEIGHT/2.)
         if self.id_team == 2:
             return Vector2D(0,GAME_HEIGHT/2.)
 
-    @property
-    def ballDistance(self):
+    @property #Distancia desde la que se puede tocar el balon
+    def minBallDistance(self):
         return PLAYER_RADIUS+BALL_RADIUS
+
+    @property #Devuelve si puede tocar el balon
+    def can_touch(self):
+        if self.player.distance(self.ball) > self.minBallDistance:
+            return False
+        else:
+            return True
     
-    @property
+    @property #Posicion donde debe estar el portero
     def posPortero(self):
         if self.id_team == 1:
             if self.ball.y > 60.:
@@ -41,14 +48,14 @@ class SuperState(object):
                 return Vector2D(GAME_WIDTH-5.,30.)
             return Vector2D(GAME_WIDTH-10.,self.ball.y)
     
-    @property
+    @property #Id del equipo enemigo
     def enemy_team(self):
         if self.id_team == 1:
             return 2
         if self.id_team == 2:
             return 1
     
-    @property
+    @property #Lista de los id del equipo enemigo
     def liste_enemy(self):
         liste = []
         for idteam, idplayer in self.state.players:
@@ -56,51 +63,14 @@ class SuperState(object):
                 liste.append(idplayer)
         return liste
 
-    @property
+    @property #Lista de los id del equipo actual
     def liste_mates(self):
         liste = []
         for idteam, idplayer in self.state.players:
             if idteam == self.id_team:
                 liste.append(idplayer)
         return liste
-    
 
-def ir_a(punto,superestado):
-    v = punto-superestado.player
-    vnorm = v.normalize()*maxPlayerAcceleration
-    return SoccerAction(vnorm,0.)
-
-def chutar(superestado):
-    c = superestado.goal-superestado.player
-    cnorm = c.normalize()*maxPlayerShoot
-    return SoccerAction(0.,cnorm)
-
-def can_shoot(superestado):
-    if superestado.player.distance(superestado.ball) > superestado.ballDistance:
-        return False
-    else:
-        return True
-
-def adversaireplusproche(idplayer,s):
-    advcercano = s.state.player_state(s.enemy_team,0)
-    for i in range(1,len(s.liste_enemy)):
-        if s.state.players[i][0] != s.id_team:
-            if s.state.player_state(s.id_team,idplayer).position.distance(s.state.player_state(s.enemy_team,i).position) < s.state.player_state(s.id_team,idplayer).position.distance(minimo.position):
-                advcercano = s.state.player_state(s.enemy_team,i)
-    return advcercano
-
-def distanceadvproche(idplayer,s):
-    adv = adversaireplusproche(idplayer,s)
-    return s.state.player_state(s.id_team,idplayer).position.distance(adv.position)
-
-def teammatealone(s):
-    idsolo = 0
-    for i in range(1,len(s.liste_mates)):
-        if distanceadvproche(i,s) > distanceadvproche(idsolo,s): #?
-            idsolo = i
-    return s.state.player_state(s.id_team,idsolo)
-
-def pasar(superestado):
-    p = teammatealone(superestado).position-superestado.player
-    pnorm = p.normalize()*maxPlayerShoot
-    return SoccerAction(0.,pnorm)
+    @property #Posicion donde estará la pelota segun su velocidad
+    def ballaprox(self):
+        return self.ball + 5 * self.state.ball.vitesse

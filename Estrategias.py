@@ -1,5 +1,6 @@
 from soccersimulator import Strategy, SoccerAction, Vector2D
 from tools import *
+from actions import *
 
 #Estrategia de movimiento aleatorio
 class EstrategiaAleatoria(Strategy):
@@ -19,7 +20,7 @@ class EstrategiaTirador(Strategy):
 
 	def compute_strategy(self, state, id_team, id_player):
 		s = SuperState(state,id_team,id_player)
-		if can_shoot(s):
+		if s.can_touch:
 			return chutar(s)
 		else:
 			return ir_a(s.ball,s)
@@ -40,7 +41,7 @@ class Portero(Strategy):
     
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if can_shoot(s):
+        if s.can_touch:
             return pasar(s)
         else:
             return ir_a(s.posPortero,s)
