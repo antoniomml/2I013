@@ -1,6 +1,5 @@
 # coding: utf-8
-from soccersimulator import Strategy, SoccerAction, Vector2D, SoccerTeam, Simulation, show_simu
-from tools import *
+from soccersimulator import SoccerTeam, Simulation, show_simu
 from Estrategias import *
 
 # Creacion de equipos
