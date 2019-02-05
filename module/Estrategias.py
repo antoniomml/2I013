@@ -45,3 +45,29 @@ class Portero(Strategy):
             return pasar(s)
         else:
             return ir_a(s.posPortero,s)
+
+class Defensa(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"Defensa")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        if s.can_touch:
+            return pasar(s)
+        else:
+            #if s.isNearMate: #Esta comentada por fallo en la funcion
+            #    return desmarcarse(s)
+            return ir_a(s.posDefensa,s)
+
+class Delantero(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"Delantero")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        if s.can_touch:
+            return chutar(s)
+        else:
+            #if s.isNearMate: #Esta comentada por fallo en la funcion
+            #    return desmarcarse(s)
+            return ir_a(s.posDelantero,s)

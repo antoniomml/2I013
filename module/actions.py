@@ -30,7 +30,27 @@ def teammatealone(s): #Dice cual es el compañero de equipo que está mas alejad
             idsolo = i
     return s.state.player_state(s.id_team,idsolo)
 
+def distancia_a(idteam,idplayer,s): #Da la distancia hasta un jugador
+    return s.player.distance(s.state.player_state(idteam,idplayer).position)
+
+def teammatecercano(s): #Dice cual es el compañero de equipo mas cercano
+    idcerca = 0
+    for i in range(1,len(s.liste_mates)):
+        if distancia_a(s.id_team,i,s) < distancia_a(s.id_team,idcerca,s): #?
+            idcerca = i
+    return s.state.player_state(s.id_team,idcerca)
+
 def pasar(s): #Da un pase al jugador mas solo
     p = teammatealone(s).position-s.player
     pnorm = p.normalize()*maxPlayerShoot
     return SoccerAction(0.,pnorm)
+
+def desmarcarse(s): #Se desmarca de su posicion actual
+    if s.player.y >= 45:
+        d = Vector2D(s.player.x,s.player.y-5.)-s.player
+        dnorm = d.normalize()*maxPlayerAcceleration
+        return SoccerAction(dnorm,0.)
+    if s.player.y < 45:
+        d = Vector2D(s.player.x,s.player.y+5.)-s.player
+        dnorm = d.normalize()*maxPlayerAcceleration
+        return SoccerAction(dnorm,0.)
