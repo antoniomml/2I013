@@ -66,57 +66,83 @@ class SuperState(object):
         if self.id_team == 1:
             if self.ball.y > 60.:
                 if self.ball.x < 5.:
-                    return Vector2D(self.ball.x,60.)
+                    return Vector2D(self.ballaprox.x,60.)
                 return Vector2D(5.,60.)
             if self.ball.y < 30.:
                 if self.ball.x < 5.:
-                    return Vector2D(self.ball.x,30.)
+                    return Vector2D(self.ballaprox.x,30.)
                 return Vector2D(5.,30.)
             if self.ball.x < 10.:
-                return Vector2D(self.ball.x,self.ball.y)
-            return Vector2D(10.,self.ball.y)
+                return self.ballaprox
+            return Vector2D(10.,self.ballaprox.y)
         if self.id_team == 2:
             if self.ball.y > 60.:
                 if self.ball.x > GAME_WIDTH-5.:
-                    return Vector2D(self.ball.x,60.)
+                    return Vector2D(self.ballaprox.x,60.)
                 return Vector2D(GAME_WIDTH-5.,60.)
             if self.ball.y < 30.:
                 if self.ball.x > GAME_WIDTH-5.:
-                    return Vector2D(self.ball.x,30.)
+                    return Vector2D(self.ballaprox.x,30.)
                 return Vector2D(GAME_WIDTH-5.,30.)
             if self.ball.x > GAME_WIDTH-10.:
-                return Vector2D(self.ball.x,self.ball.y)
-            return Vector2D(GAME_WIDTH-10.,self.ball.y)
+                return self.ballaprox
+            return Vector2D(GAME_WIDTH-10.,self.ballaprox.y)
 
     @property #Posicion donde debe estar el defensa
     def posDefensa(self):
         if self.id_team == 1:
             if self.ball.x > 70:
-                return Vector2D(70.,self.ball.y)
-            return Vector2D(self.ball.x,self.ball.y)
+                return Vector2D(70.,self.ballaprox.y)
+            return self.ballaprox
         if self.id_team == 2:
             if self.ball.x < 80.:
-                return Vector2D(80.,self.ball.y)
-            return Vector2D(self.ball.x,self.ball.y)
+                return Vector2D(80.,self.ballaprox.y)
+            return self.ballaprox
     
     @property #Posicion donde debe estar el delantero
     def posDelantero(self):
         if self.id_team == 1:
             if self.ball.x < 60.:
-                return Vector2D(60.,self.ball.y)
-            return Vector2D(self.ball.x,self.ball.y)
+                return Vector2D(60.,self.ballaprox.y)
+            return self.ballaprox
         if self.id_team == 2:
             if self.ball.x > 90.:
-                return Vector2D(90.,self.ball.y)
-            return Vector2D(self.ball.x,self.ball.y)
+                return Vector2D(90.,self.ballaprox.y)
+            return self.ballaprox
 
-
-    #ESTA FUNCION DA FALLOS Y NO ESTA USANDOSE
     @property #Devuelve si hay un compañero muy cerca
     def isNearMate(self):
         d = teammatecercano(self).position.distance(self.player)
-        if d < 2.:
+        if d <= 5.:
+            return True
+        if d > 5.:
+            return False
+    
+    @property
+    def meDesmarco(self):
+        if distanciaBalon(teammatecercano(self),self) < distanciaBalon(self.state.player_state(self.id_team,self.id_player),self):
             return True
         else:
             return False
+
+    @property
+    def deboChutar(self):
+        if self.id_team == 1:
+            if self.ball.x > 115. and self.ball.y > 30. and self.ball.y < 60.:
+                return True
+            else:
+                return False
+        if self.id_team == 2:
+            if self.ball.x < 35.:
+                return True
+            else:
+                return False
+
+    @property
+    def deboPasar(self):
+        if distanceadvproche(self.id_player,self) < 2.:
+            return True
+        else:
+            return False
+    
     

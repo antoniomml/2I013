@@ -53,10 +53,16 @@ class Defensa(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if s.can_touch:
-            return pasar(s)
+            if s.deboPasar:
+                return pasar(s)
+            else:
+                return avanzar(s)
         else:
-            #if s.isNearMate: #Esta comentada por fallo en la funcion
-            #    return desmarcarse(s)
+            if s.isNearMate:
+                if s.meDesmarco:
+                    return desmarcarse(s)
+                else:
+                    return ir_a(s.posDefensa,s)
             return ir_a(s.posDefensa,s)
 
 class Delantero(Strategy):
@@ -66,8 +72,17 @@ class Delantero(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if s.can_touch:
-            return chutar(s)
+            if s.deboChutar:
+                return chutar(s)
+            else:
+                if s.deboPasar:
+                    return pasar(s)
+                else:
+                    return avanzar(s)
         else:
-            #if s.isNearMate: #Esta comentada por fallo en la funcion
-            #    return desmarcarse(s)
+            if s.isNearMate:
+                if s.meDesmarco:
+                    return desmarcarse(s)
+                else:
+                    return ir_a(s.posDelantero,s)
             return ir_a(s.posDelantero,s)
