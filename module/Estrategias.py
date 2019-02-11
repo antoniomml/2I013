@@ -49,6 +49,7 @@ class Portero(Strategy):
         else:
             return ir_a(s.posPortero,s)
 
+#Estrategia de Defensa
 class Defensa(Strategy):
     def __init__(self):
         Strategy.__init__(self,"Defensa")
@@ -68,6 +69,7 @@ class Defensa(Strategy):
                     return ir_a(s.posDefensa,s)
             return ir_a(s.posDefensa,s)
 
+#Estrategia de Delantero
 class Delantero(Strategy):
     def __init__(self):
         Strategy.__init__(self,"Delantero")

@@ -39,13 +39,13 @@ def teammatealone(s): #Dice cual es el compañero de equipo que está mas alejad
 def distancia_a(idteam,idplayer,s): #Da la distancia hasta un jugador
     return s.player.distance(s.state.player_state(idteam,idplayer).position)
 
-def distanciaPlayer(player1,s):
+def distanciaPlayer(player1,s): #Da la distancia hasta un jugador
     return s.player.distance(player1.position)
 
-def distanciaPorteria(s):
+def distanciaPorteria(s): #Da la distancia hasta la porteria
     return s.player.distance(s.goal)
 
-def distanciaBalon(player,s): #Da la distancia a el balon
+def distanciaBalon(player,s): #Da la distancia hasta el balon
     return player.position.distance(s.ball)
 
 def teammatecercano(s): #Dice cual es el compañero de equipo mas cercano
@@ -61,7 +61,7 @@ def teammatecercano(s): #Dice cual es el compañero de equipo mas cercano
                 idcerca = i
     return s.state.player_state(s.id_team,idcerca)
 
-def pasar(s): #Da un pase al jugador mas solo (si fuerza = 0 -> fuerza = maxPlayerShoot)
+def pasar(s): #Da un pase al jugador mas solo
     mate = teammatealone(s)
     d = distanciaPlayer(mate,s)
     p = mate.position-s.player
@@ -101,12 +101,12 @@ def desmarcarse(s): #Se desmarca de su posicion actual
             dnorm = d.normalize()*maxPlayerAcceleration
             return SoccerAction(dnorm,0.)
 
-def avanzar(s):
+def avanzar(s): #Avanza dando pequenos toques al balon
     v = s.goal-s.player
     vnorm = v.normalize()*2.5
     return SoccerAction(vnorm,vnorm/2)
 
-def despejar(s):
+def despejar(s): #Despeja el balon hacia un jugador o hacia la porteria con fuerza
     punto = teammatealone(s).position
     if s.goal.distance(punto) < s.goal.distance(s.player):
         v = punto-s.player

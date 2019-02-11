@@ -121,34 +121,34 @@ class SuperState(object):
             return False
     
     @property
-    def meDesmarco(self):
+    def meDesmarco(self): #Devuelves si se debe de desmarcar
         if distanciaBalon(teammatecercano(self),self) < distanciaBalon(self.state.player_state(self.id_team,self.id_player),self):
             return True
         else:
             return False
 
     @property
-    def deboChutar(self):
+    def deboChutar(self): #Devuelve si debe chutar a porteria
         if distanciaPorteria(self) < 35. and self.ball.y > 30. and self.ball.y < 60.:
             return True
         else:
             return False
 
     @property
-    def deboPasar(self):
+    def deboPasar(self): #Devuelve si debe pasar el balon
         if distanceadvproche(self.id_player,self) < 2. and self.nbteammates > 1:
             return True
         else:
             return False
 
     @property
-    def deboDespejar(self):
+    def deboDespejar(self): #Devuelve si debe despejar el balon
         if distanciaPlayer(teammatecercano(self),self) > distanceadvproche(self.id_player,self):
             return True
         else:
             return False
     
     @property
-    def nbteammates(self):
+    def nbteammates(self): #Devuelve el numero de jugadores de su equipo
         return len(self.liste_mates)
     
