@@ -24,6 +24,8 @@ def distanceadvproche(idplayer,s): #Da la distancia del jugador mas cercano a un
     return s.state.player_state(s.id_team,idplayer).position.distance(adv.position)
 
 def teammatealone(s): #Dice cual es el compañero de equipo que está mas alejado de los adversarios
+    if s.nbteammates == 1:
+        return s.state.player_state(s.id_team,s.id_player)
     idsolo = 0
     for i in range(1,len(s.liste_mates)):
         if distanceadvproche(i,s) > distanceadvproche(idsolo,s): #?
@@ -37,6 +39,8 @@ def distanciaBalon(player,s): #Da la distancia a el balon
     return player.position.distance(s.ball)
 
 def teammatecercano(s): #Dice cual es el compañero de equipo mas cercano
+    if s.nbteammates == 1:
+        return s.state.player_state(s.id_team,s.id_player)
     if s.id_player == 0:
         idcerca = 1
     else:

@@ -101,6 +101,8 @@ class SuperState(object):
     
     @property #Posicion donde debe estar el delantero
     def posDelantero(self):
+        if len(self.liste_mates) == 1:
+            return self.ballaprox
         if self.id_team == 1:
             if self.ball.x < 60.:
                 return Vector2D(60.,self.ballaprox.y)
@@ -140,9 +142,12 @@ class SuperState(object):
 
     @property
     def deboPasar(self):
-        if distanceadvproche(self.id_player,self) < 2.:
+        if distanceadvproche(self.id_player,self) < 2. and self.nbteammates > 1:
             return True
         else:
             return False
     
+    @property
+    def nbteammates(self):
+        return len(self.liste_mates)
     
