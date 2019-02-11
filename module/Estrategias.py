@@ -30,7 +30,7 @@ class EstrategiaTirador(Strategy):
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state,id_team,id_player)
         if s.can_touch:
-            return chutar(s)
+            return chutar(0,s)
         else:
             return ir_a(s.ball,s)
 
@@ -42,7 +42,10 @@ class Portero(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if s.can_touch:
-            return pasar(s)
+            if s.deboDespejar:
+                return despejar(s)
+            else:
+                return pasar(s)
         else:
             return ir_a(s.posPortero,s)
 
@@ -73,7 +76,7 @@ class Delantero(Strategy):
         s = SuperState(state,id_team,id_player)
         if s.can_touch:
             if s.deboChutar:
-                return chutar(s)
+                return chutar(4,s) #Chuta con fuerza 4 por optimizacion
             else:
                 if s.deboPasar:
                     return pasar(s)

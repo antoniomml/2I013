@@ -129,20 +129,21 @@ class SuperState(object):
 
     @property
     def deboChutar(self):
-        if self.id_team == 1:
-            if self.ball.x > 115. and self.ball.y > 30. and self.ball.y < 60.:
-                return True
-            else:
-                return False
-        if self.id_team == 2:
-            if self.ball.x < 35.:
-                return True
-            else:
-                return False
+        if distanciaPorteria(self) < 35. and self.ball.y > 30. and self.ball.y < 60.:
+            return True
+        else:
+            return False
 
     @property
     def deboPasar(self):
         if distanceadvproche(self.id_player,self) < 2. and self.nbteammates > 1:
+            return True
+        else:
+            return False
+
+    @property
+    def deboDespejar(self):
+        if distanciaPlayer(teammatecercano(self),self) > distanceadvproche(self.id_player,self):
             return True
         else:
             return False
