@@ -15,27 +15,6 @@ def chutar(fuerza,s): #Chutar a porteria (si fuerza = 0 -> fuerza = maxPlayerSho
         cnorm = c.normalize()*fuerza #POR LAS PRUEBAS A 35M MEJOR TIRAR CON 4 DE FUERZA
         return SoccerAction(0.,cnorm)
 
-def adversaireplusproche(idplayer,s): #Dice cual es el adversario mas cercano a un jugador
-    advcercano = s.state.player_state(s.enemy_team,0)
-    for i in range(1,len(s.liste_enemy)):
-        if s.state.players[i][0] != s.id_team:
-            if s.state.player_state(s.id_team,idplayer).position.distance(s.state.player_state(s.enemy_team,i).position) < s.state.player_state(s.id_team,idplayer).position.distance(advcercano.position):
-                advcercano = s.state.player_state(s.enemy_team,i)
-    return advcercano
-
-def distanceadvproche(idplayer,s): #Da la distancia del jugador mas cercano a uno deseado
-    adv = adversaireplusproche(idplayer,s)
-    return s.state.player_state(s.id_team,idplayer).position.distance(adv.position)
-
-def teammatealone(s): #Dice cual es el compañero de equipo que está mas alejado de los adversarios
-    if s.nbteammates == 1:
-        return s.state.player_state(s.id_team,s.id_player)
-    idsolo = 0
-    for i in range(1,len(s.liste_mates)):
-        if distanceadvproche(i,s) > distanceadvproche(idsolo,s): #?
-            idsolo = i
-    return s.state.player_state(s.id_team,idsolo)
-
 def distancia_a(idteam,idplayer,s): #Da la distancia hasta un jugador
     return s.player.distance(s.state.player_state(idteam,idplayer).position)
 
@@ -47,6 +26,27 @@ def distanciaPorteria(s): #Da la distancia hasta la porteria
 
 def distanciaBalon(player,s): #Da la distancia hasta el balon
     return player.position.distance(s.ball)
+
+def distanceadvproche(idplayer,s): #Da la distancia del jugador mas cercano a uno deseado
+    adv = adversaireplusproche(idplayer,s)
+    return s.state.player_state(s.id_team,idplayer).position.distance(adv.position)
+
+def adversaireplusproche(idplayer,s): #Dice cual es el adversario mas cercano a un jugador
+    advcercano = s.state.player_state(s.enemy_team,0)
+    for i in range(1,len(s.liste_enemy)):
+        if s.state.players[i][0] != s.id_team:
+            if s.state.player_state(s.id_team,idplayer).position.distance(s.state.player_state(s.enemy_team,i).position) < s.state.player_state(s.id_team,idplayer).position.distance(advcercano.position):
+                advcercano = s.state.player_state(s.enemy_team,i)
+    return advcercano
+
+def teammatealone(s): #Dice cual es el compañero de equipo que está mas alejado de los adversarios
+    if s.nbteammates == 1:
+        return s.state.player_state(s.id_team,s.id_player)
+    idsolo = 0
+    for i in range(1,len(s.liste_mates)):
+        if distanceadvproche(i,s) > distanceadvproche(idsolo,s): #?
+            idsolo = i
+    return s.state.player_state(s.id_team,idsolo)
 
 def teammatecercano(s): #Dice cual es el compañero de equipo mas cercano
     if s.nbteammates == 1:
