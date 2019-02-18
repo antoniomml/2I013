@@ -3,7 +3,7 @@ from module.tools import *
 from module.actions import *
 
 #Estrategia de movimiento aleatorio
-class EstrategiaAleatoria(Strategy):
+class StrategieAleatoire(Strategy):
     def __init__(self):
         Strategy.__init__(self, "Aleatoria")
 
@@ -14,7 +14,7 @@ class EstrategiaAleatoria(Strategy):
                             Vector2D.create_random())
 
 #Estrategia Simple (para prueba de acciones)
-class EstrategiaSimple(Strategy):
+class StrategieSimple(Strategy):
     def __init__(self):
         Strategy.__init__(self, "Simple")
 
@@ -23,7 +23,7 @@ class EstrategiaSimple(Strategy):
         return allerA(Vector2D(15.,17.),s)
 
 #Estrategia de buscar el balon y tirar
-class EstrategiaTirador(Strategy):
+class StrategieFonceur(Strategy):
     def __init__(self):
         Strategy.__init__(self, "Tirador")
 
@@ -35,14 +35,14 @@ class EstrategiaTirador(Strategy):
             return allerA(s.ballon,s)
 
 #Estrategia de Portero
-class Portero(Strategy):
+class Gardien(Strategy):
     def __init__(self):
-        Strategy.__init__(self,"Portero")
+        Strategy.__init__(self,"Gardien")
     
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if s.peutToucher:
-            if s.deboDespejar:
+            if s.jeDoisDegager:
                 return degager(s)
             else:
                 return passer(s)
@@ -50,43 +50,43 @@ class Portero(Strategy):
             return allerA(s.posGardien,s)
 
 #Estrategia de Defensa
-class Defensa(Strategy):
+class Defenseur(Strategy):
     def __init__(self):
-        Strategy.__init__(self,"Defensa")
+        Strategy.__init__(self,"Defenseur")
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if s.peutToucher:
-            if s.deboPasar:
+            if s.jeDoisPasser:
                 return passer(s)
             else:
                 return avancer(s)
         else:
             if s.estProcheCoequipier:
-                if s.meDesmarco:
+                if s.meDemarque:
                     return seDemarquer(s)
                 else:
                     return allerA(s.posDefenseur,s)
             return allerA(s.posDefenseur,s)
 
 #Estrategia de Delantero
-class Delantero(Strategy):
+class Attaquant(Strategy):
     def __init__(self):
-        Strategy.__init__(self,"Delantero")
+        Strategy.__init__(self,"Attaquant")
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if s.peutToucher:
-            if s.deboChutar:
+            if s.jeDoisTirer:
                 return tirer(4,s) #Chuta con fuerza 4 por optimizacion
             else:
-                if s.deboPasar:
+                if s.jeDoisPasser:
                     return passer(s)
                 else:
                     return avancer(s)
         else:
             if s.estProcheCoequipier:
-                if s.meDesmarco:
+                if s.meDemarque:
                     return seDemarquer(s)
                 else:
                     return allerA(s.posAttaquant,s)

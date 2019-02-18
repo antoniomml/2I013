@@ -4,14 +4,14 @@ from soccersimulator import SoccerTeam
 def get_team ( nb_players ):
 	team = SoccerTeam(name = "Antonio Milla's Team")
 	if nb_players == 1:
-		team.add("Delantero",Delantero())
+		team.add("Attaquant",Attaquant())
 	if nb_players == 2:
-		team.add("Delantero",Delantero())
-		team.add("Portero",Portero())
+		team.add("Attaquant",Attaquant())
+		team.add("Gardien",Gardien())
 	if nb_players == 3:
-		team.add("Delantero",Delantero())
-		team.add("Portero",Portero())
-		team.add("Defensa",Defensa())
+		team.add("Attaquant",Attaquant())
+		team.add("Gardien",Gardien())
+		team.add("Defenseur",Defenseur())
 
 	return team
 

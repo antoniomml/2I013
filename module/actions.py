@@ -41,7 +41,7 @@ def adversairePlusProche(idplayer,s): #Dice cual es el adversario mas cercano a 
     return advcercano
 
 def coequipierSeul(s): #Dice cual es el compañero de equipo que está mas alejado de los adversarios
-    if s.nbTeammates == 1:
+    if s.nbCoequipiers == 1:
         return s.state.player_state(s.id_team,s.id_player)
     idsolo = 0
     for i in range(1,len(s.listeEquipe)):
@@ -50,7 +50,7 @@ def coequipierSeul(s): #Dice cual es el compañero de equipo que está mas aleja
     return s.state.player_state(s.id_team,idsolo)
 
 def coequipierProche(s): #Dice cual es el compañero de equipo mas cercano
-    if s.nbTeammates == 1:
+    if s.nbCoequipiers == 1:
         return s.state.player_state(s.id_team,s.id_player)
     if s.id_player == 0:
         idcerca = 1

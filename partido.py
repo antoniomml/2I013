@@ -6,13 +6,13 @@ team1 = SoccerTeam(name="Real Madrid")
 team2 = SoccerTeam(name="Barcelona")
 
 # Creacion de jugadores
-team1.add("Gareth Bale", Delantero())
-team1.add("Sergio Ramos", Defensa())
-team1.add("Courtois", Portero())
+team1.add("Gareth Bale", Attaquant())
+team1.add("Sergio Ramos", Defenseur())
+team1.add("Courtois", Gardien())
 
-team2.add("Lionel Messi", Delantero())
-team2.add("Gerard Pique", Defensa())
-team2.add("Ter Stegen", Portero())
+team2.add("Lionel Messi", Attaquant())
+team2.add("Gerard Pique", Defenseur())
+team2.add("Ter Stegen", Gardien())
 
 # Creacion del partido
 simu = Simulation(team1, team2)
