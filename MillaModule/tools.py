@@ -119,12 +119,12 @@ class SuperState(object):
         if self.nbCoequipiers == 1:
             return self.ballonApprox
         if self.id_team == 1:
-            if self.ballon.x < 60.:
-                return Vector2D(60.,self.ballonApprox.y)
+            if self.ballon.x < 45.:
+                return Vector2D(45.,self.ballonApprox.y)
             return self.ballonApprox
         if self.id_team == 2:
-            if self.ballon.x > 90.:
-                return Vector2D(90.,self.ballonApprox.y)
+            if self.ballon.x > 105.:
+                return Vector2D(105.,self.ballonApprox.y)
             return self.ballonApprox
 
     @property #Devuelve si hay un compañero muy cerca

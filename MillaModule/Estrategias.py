@@ -75,6 +75,8 @@ class Defenseur(Strategy):
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
         if s.peutToucher:
+            if s.autrePeutTirer:
+                return tirer(0,s)
             if s.jeDoisPasser:
                 return passer(s)
             else:
@@ -98,6 +100,8 @@ class Attaquant(Strategy):
             if s.jeDoisTirer:
                 return tirer(4,s) #Chuta con fuerza 4 por optimizacion
             else:
+                if s.autrePeutTirer:
+                    return tirer(0,s)
                 if s.jeDoisPasser:
                     return passer(s)
                 else:
