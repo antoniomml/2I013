@@ -1,6 +1,6 @@
 from soccersimulator import Vector2D, SoccerAction
 from soccersimulator.settings import GAME_WIDTH, GAME_HEIGHT, PLAYER_RADIUS, BALL_RADIUS, maxPlayerAcceleration, maxPlayerShoot
-from module.actions import *
+from MillaModule.actions import *
 
 class SuperState(object):
     def __init__(self,state,id_team,id_player):
@@ -61,6 +61,21 @@ class SuperState(object):
     def ballonApprox(self):
         return self.ballon + 5 * self.state.ball.vitesse
 
+    @property
+    def posFonceur(self):
+        if self.nbCoequipiers == 1:
+            return self.ballonApprox
+        if self.id_team == 1:
+            if self.ballon.x < 40:
+                return Vector2D(40.,self.ballonApprox.y)
+            else:
+                return self.ballonApprox
+        if self.id_team == 2:
+            if self.ballon.x > GAME_WIDTH-40.:
+                return Vector2D(GAME_WIDTH-40.,self.ballonApprox.y)
+            else:
+                return self.ballonApprox
+
     @property #Posicion donde debe estar el portero
     def posGardien(self):
         if self.id_team == 1:
@@ -101,7 +116,7 @@ class SuperState(object):
     
     @property #Posicion donde debe estar el delantero
     def posAttaquant(self):
-        if len(self.listeEquipe) == 1:
+        if self.nbCoequipiers == 1:
             return self.ballonApprox
         if self.id_team == 1:
             if self.ballon.x < 60.:
@@ -152,3 +167,15 @@ class SuperState(object):
     @property
     def nbCoequipiers(self): #Devuelve el numero de jugadores de su equipo
         return len(self.listeEquipe)
+
+    @property
+    def autrePeutTirer(self):
+        liste = []
+        for idteam, idplayer in self.state.players:
+            if idteam == self.equipeEnnemi:
+                if peutToucher(idteam,idplayer,self):
+                    liste.append(idplayer)
+        if len(liste) > 0:
+            return True
+        else:
+            return False

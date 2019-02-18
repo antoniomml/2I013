@@ -1,6 +1,6 @@
 from soccersimulator import Strategy, SoccerAction, Vector2D, SoccerTeam, Simulation, show_simu
-from module.tools import *
-from module.actions import *
+from MillaModule.tools import *
+from MillaModule.actions import *
 from sklearn.model_selection import ParameterGrid
 
 class GoalSearch(object):

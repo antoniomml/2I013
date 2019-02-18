@@ -1,7 +1,7 @@
 from Simulation import *
 from soccersimulator import SoccerTeam, Simulation, show_simu
 from soccersimulator.settings import GAME_WIDTH, GAME_HEIGHT, PLAYER_RADIUS, BALL_RADIUS, maxPlayerAcceleration, maxPlayerShoot
-from module.Estrategias import *
+from MillaModule.Estrategias import *
 
 class Tirador(Strategy):
     def __init__(self,strength=None):

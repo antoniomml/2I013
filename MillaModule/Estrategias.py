@@ -1,6 +1,6 @@
 from soccersimulator import Strategy, SoccerAction, Vector2D
-from module.tools import *
-from module.actions import *
+from MillaModule.tools import *
+from MillaModule.actions import *
 
 #Estrategia de movimiento aleatorio
 class StrategieAleatoire(Strategy):
@@ -33,6 +33,24 @@ class StrategieFonceur(Strategy):
             return tirer(0,s)
         else:
             return allerA(s.ballon,s)
+
+#Estrategia de Tirador Mejorado
+class FonceurAmeliore(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"Fonceur Ameliore")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        if s.peutToucher:
+            if s.jeDoisTirer:
+                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+            else:
+                if s.autrePeutTirer:
+                    return tirer(0,s)
+                else:
+                    return avancer(s)
+        else:
+            return allerA(s.posFonceur,s)
 
 #Estrategia de Portero
 class Gardien(Strategy):

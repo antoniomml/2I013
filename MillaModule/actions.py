@@ -1,5 +1,5 @@
 from soccersimulator import Vector2D, SoccerAction
-from module.tools import *
+from MillaModule.tools import *
 
 def allerA(punto,s): #Ir a un punto determinado
     v = punto-s.joueur
@@ -64,6 +64,11 @@ def coequipierProche(s): #Dice cual es el compañero de equipo mas cercano
 
 #def lancerA(s):
 
+def peutToucher(idteam,idplayer,s): #Devuelve si puede tocar el balon
+    if s.state.player_state(idteam,idplayer).position.distance(s.ballon) > s.minDistanceBallon:
+        return False
+    else:
+        return True
 
 def passer(s): #Da un pase al jugador mas solo
     mate = coequipierSeul(s)
