@@ -66,7 +66,7 @@ def coequipierProche(s): #Dice cual es el compañero de equipo mas cercano
                 idcerca = i
     return s.state.player_state(s.id_team,idcerca)
 
-def forceTir(distance,s):
+def forceTir(distance,s): #Da la fuerza (valor por el que multiplicar el vector) del tiro
     if distance >= 60.:
         return maxPlayerShoot
     if distance >= 50. and distance < 60:
