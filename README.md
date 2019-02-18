@@ -1,5 +1,6 @@
 # UE 2I013 - Projet Foot - Sorbonne Université
-
+[![Stage](https://img.shields.io/badge/Release-Stable-brightgreen.svg)]()
+[![Build](https://img.shields.io/badge/Supported_OS-Linux-orange.svg)]()
 ## Repositorio programa:
 
 https://github.com/sangnier/Soccer
@@ -7,13 +8,9 @@ https://github.com/sangnier/Soccer
 ## Instalacion Python3:
 
 Windows:
-```
-https://www.python.org/downloads/
-```
+```https://www.python.org/downloads/```
 Linux:
-```
-sudo apt install python3
-```
+```sudo apt install python3```
 
 ## Instalacion bibliotecas:
 ```
