@@ -70,6 +70,8 @@ class Gardien(Strategy):
             else:
                 return passer(s)
         else:
+            if s.jeDoisSortir:
+                return allerA(s.ballonApprox,s)
             return allerA(s.posGardien,s)
 
 #Estrategia de Defensa

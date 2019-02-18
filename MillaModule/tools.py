@@ -7,13 +7,14 @@ class SuperState(object):
         self.state = state
         self.id_team = id_team
         self.id_player = id_player
+        self.joueur = state.player_state(id_team,id_player)
     
     @property #Posicion de la pelota
     def ballon(self):
         return self.state.ball.position
 
     @property #Posicion del jugador que ejecuta la estrategia
-    def joueur(self):
+    def joueurPos(self):
         return self.state.player_state(self.id_team,self.id_player).position
 
     @property #Posicion de la porteria contraria
@@ -29,7 +30,7 @@ class SuperState(object):
 
     @property #Devuelve si puede tocar el balon
     def peutToucher(self):
-        if self.joueur.distance(self.ballon) > self.minDistanceBallon:
+        if self.joueurPos.distance(self.ballon) > self.minDistanceBallon:
             return False
         else:
             return True
@@ -129,7 +130,7 @@ class SuperState(object):
 
     @property #Devuelve si hay un compañero muy cerca
     def estProcheCoequipier(self):
-        d = coequipierProche(self).position.distance(self.joueur)
+        d = coequipierProche(self).position.distance(self.joueurPos)
         if d <= 5.:
             return True
         if d > 5.:
@@ -163,6 +164,16 @@ class SuperState(object):
             return True
         else:
             return False
+    
+    @property
+    def jeDoisSortir(self):
+        d = distanceBallon(self.joueur,self)
+        if distanceAdvProche(self.id_player,self) > d*2:
+            if distanceBallon(coequipierProche(self),self) > d:
+                if distanceBallon(self.joueur,self) < 10.:
+                    return True
+        return False
+                
     
     @property #Devuelve el numero de jugadores de su equipo
     def nbCoequipiers(self):

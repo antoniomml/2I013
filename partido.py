@@ -6,7 +6,7 @@ team1 = SoccerTeam(name="Real Madrid")
 team2 = SoccerTeam(name="Barcelona")
 
 # Creacion de jugadores
-team1.add("Gareth Bale", Attaquant())
+team1.add("Gareth Bale", FonceurAmeliore())
 team1.add("Sergio Ramos", Defenseur())
 team1.add("Courtois", Gardien())
 

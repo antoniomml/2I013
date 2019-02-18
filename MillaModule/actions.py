@@ -2,8 +2,8 @@ from soccersimulator import Vector2D, SoccerAction
 from MillaModule.tools import *
 
 def allerA(punto,s): #Ir a un punto determinado
-    v = punto-s.joueur
-    d = punto.distance(s.joueur)
+    v = punto-s.joueurPos
+    d = punto.distance(s.joueurPos)
     if d < 2:
         return SoccerAction(0,0)
     else:
@@ -11,7 +11,7 @@ def allerA(punto,s): #Ir a un punto determinado
         return SoccerAction(vnorm,0.)
 
 def tirer(fuerza,s): #Chutar a porteria (fuerzamax = maxPlayerShoot = 6)
-    c = s.but-s.joueur
+    c = s.but-s.joueurPos
     if fuerza > maxPlayerShoot:
         cnorm = c.normalize()*maxPlayerShoot
         return SoccerAction(0.,cnorm)
@@ -20,13 +20,13 @@ def tirer(fuerza,s): #Chutar a porteria (fuerzamax = maxPlayerShoot = 6)
         return SoccerAction(0.,cnorm)
 
 def distanceIdJoueur(idteam,idplayer,s): #Da la distancia hasta un jugador
-    return s.joueur.distance(s.state.player_state(idteam,idplayer).position)
+    return s.joueurPos.distance(s.state.player_state(idteam,idplayer).position)
 
 def distanceJoueur(player1,s): #Da la distancia hasta un jugador
-    return s.joueur.distance(player1.position)
+    return s.joueurPos.distance(player1.position)
 
 def distanceBut(s): #Da la distancia hasta la porteria
-    return s.joueur.distance(s.but)
+    return s.joueurPos.distance(s.but)
 
 def distanceBallon(player,s): #Da la distancia hasta el balon
     return player.position.distance(s.ballon)
@@ -83,8 +83,8 @@ def forceTir(distance,s): #Da la fuerza (valor por el que multiplicar el vector)
         return 0
 
 def lancerA(punto,s): #Lanza el balon a un punto en concreto
-    v = punto-s.joueur
-    distance = punto.distance(s.joueur)
+    v = punto-s.joueurPos
+    distance = punto.distance(s.joueurPos)
     vnorm = v.normalize()*forceTir(distance,s)
     return SoccerAction(0.,vnorm)
 
@@ -97,41 +97,41 @@ def peutToucher(idteam,idplayer,s): #Devuelve si puede tocar el balon
 def passer(s): #Da un pase al jugador mas solo
     mate = coequipierSeul(s)
     d = distanceJoueur(mate,s)
-    p = mate.position-s.joueur
+    p = mate.position-s.joueurPos
     pnorm = p.normalize()*forceTir(d,s)
     return SoccerAction(0.,pnorm)
 
 def seDemarquer(s): #Se desmarca de su posicion actual
-    if s.joueur.y >= 50:
-        d = Vector2D(s.joueur.x,s.joueur.y-10.)-s.joueur
+    if s.joueurPos.y >= 50:
+        d = Vector2D(s.joueurPos.x,s.joueurPos.y-10.)-s.joueurPos
         dnorm = d.normalize()*maxPlayerAcceleration
         return SoccerAction(dnorm,0.)
-    if s.joueur.y <= 40:
-        d = Vector2D(s.joueur.x,s.joueur.y+10.)-s.joueur
+    if s.joueurPos.y <= 40:
+        d = Vector2D(s.joueurPos.x,s.joueurPos.y+10.)-s.joueurPos
         dnorm = d.normalize()*maxPlayerAcceleration
         return SoccerAction(dnorm,0.)
-    if s.joueur.y < 50 and s.joueur.y > 40:
+    if s.joueurPos.y < 50 and s.joueurPos.y > 40:
         if s.id_team == 1:
-            d = Vector2D(s.joueur.x-10.,s.joueur.y)-s.joueur
+            d = Vector2D(s.joueurPos.x-10.,s.joueurPos.y)-s.joueurPos
             dnorm = d.normalize()*maxPlayerAcceleration
             return SoccerAction(dnorm,0.)
         if s.id_team == 2:
-            d = Vector2D(s.joueur.x+10.,s.joueur.y)-s.joueur
+            d = Vector2D(s.joueurPos.x+10.,s.joueurPos.y)-s.joueurPos
             dnorm = d.normalize()*maxPlayerAcceleration
             return SoccerAction(dnorm,0.)
 
 def avancer(s): #Avanza dando pequenos toques al balon
-    v = s.but-s.joueur
+    v = s.but-s.joueurPos
     vnorm = v.normalize()*2.5
     return SoccerAction(vnorm,vnorm/2)
 
 def degager(s): #Despeja el balon hacia un jugador o hacia la porteria con fuerza
     punto = coequipierSeul(s).position
-    if s.but.distance(punto) < s.but.distance(s.joueur):
-        v = punto-s.joueur
+    if s.but.distance(punto) < s.but.distance(s.joueurPos):
+        v = punto-s.joueurPos
         vnorm = v.normalize()*maxPlayerShoot
         return SoccerAction(0.,vnorm)
     else:
-        v = s.but-s.joueur
+        v = s.but-s.joueurPos
         vnorm = v.normalize()*maxPlayerShoot
         return SoccerAction(0.,vnorm)
