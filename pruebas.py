@@ -10,10 +10,10 @@ class Tirador(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.can_touch:
-            return chutar(self.strength,s)
+        if s.peutToucher:
+            return tirer(self.strength,s)
         else:
-            return ir_a(s.ball,s)
+            return allerA(s.ballon,s)
 
 class Pasador(Strategy):
     def __init__(self,strength=None):
@@ -22,10 +22,10 @@ class Pasador(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.can_touch:
-            return pasar(self.strength,s)
+        if s.peutToucher:
+            return passer(self.strength,s)
         else:
-            return ir_a(s.ball,s)
+            return allerA(s.ballon,s)
 
 expe = GoalSearch(Tirador(),params={'strength':[3,4,5,0]}) #max=6
 expe.start() #expe.start(False) no muestra el partido

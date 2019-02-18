@@ -142,7 +142,7 @@ class BuscaPase(object):
     
     def end_round(self,team1,team2,state):
         # A round ends when there is a goal of if max step is achieved
-        if self.simu.state.states[(1,1)].can_touch(state):
+        if self.simu.state.states[(1,1)].peutToucher(state):
             self.criterion += 1 # Increment criterion
 
         self.cpt_trials += 1

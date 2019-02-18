@@ -9,48 +9,48 @@ class SuperState(object):
         self.id_player = id_player
     
     @property #Posicion de la pelota
-    def ball(self):
+    def ballon(self):
         return self.state.ball.position
 
     @property #Posicion del jugador que ejecuta la estrategia
-    def player(self):
+    def joueur(self):
         return self.state.player_state(self.id_team,self.id_player).position
 
     @property #Posicion de la porteria contraria
-    def goal(self):
+    def but(self):
         if self.id_team == 1:
             return Vector2D(GAME_WIDTH,GAME_HEIGHT/2.)
         if self.id_team == 2:
             return Vector2D(0,GAME_HEIGHT/2.)
 
     @property #Distancia desde la que se puede tocar el balon
-    def minBallDistance(self):
+    def minDistanceBallon(self):
         return PLAYER_RADIUS+BALL_RADIUS
 
     @property #Devuelve si puede tocar el balon
-    def can_touch(self):
-        if self.player.distance(self.ball) > self.minBallDistance:
+    def peutToucher(self):
+        if self.joueur.distance(self.ballon) > self.minDistanceBallon:
             return False
         else:
             return True
     
     @property #Id del equipo enemigo
-    def enemy_team(self):
+    def equipeEnnemi(self):
         if self.id_team == 1:
             return 2
         if self.id_team == 2:
             return 1
     
     @property #Lista de los id del equipo enemigo
-    def liste_enemy(self):
+    def listeEnnemi(self):
         liste = []
         for idteam, idplayer in self.state.players:
-            if idteam == self.enemy_team:
+            if idteam == self.equipeEnnemi:
                 liste.append(idplayer)
         return liste
 
     @property #Lista de los id del equipo actual
-    def liste_mates(self):
+    def listeEquipe(self):
         liste = []
         for idteam, idplayer in self.state.players:
             if idteam == self.id_team:
@@ -58,63 +58,63 @@ class SuperState(object):
         return liste
 
     @property #Posicion donde estará la pelota segun su velocidad
-    def ballaprox(self):
-        return self.ball + 5 * self.state.ball.vitesse
+    def ballonApprox(self):
+        return self.ballon + 5 * self.state.ball.vitesse
 
     @property #Posicion donde debe estar el portero
-    def posPortero(self):
+    def posGardien(self):
         if self.id_team == 1:
-            if self.ball.y > 60.:
-                if self.ball.x < 5.:
-                    return Vector2D(self.ballaprox.x,60.)
+            if self.ballon.y > 60.:
+                if self.ballon.x < 5.:
+                    return Vector2D(self.ballonApprox.x,60.)
                 return Vector2D(5.,60.)
-            if self.ball.y < 30.:
-                if self.ball.x < 5.:
-                    return Vector2D(self.ballaprox.x,30.)
+            if self.ballon.y < 30.:
+                if self.ballon.x < 5.:
+                    return Vector2D(self.ballonApprox.x,30.)
                 return Vector2D(5.,30.)
-            if self.ball.x < 10.:
-                return self.ballaprox
-            return Vector2D(10.,self.ballaprox.y)
+            if self.ballon.x < 10.:
+                return self.ballonApprox
+            return Vector2D(10.,self.ballonApprox.y)
         if self.id_team == 2:
-            if self.ball.y > 60.:
-                if self.ball.x > GAME_WIDTH-5.:
-                    return Vector2D(self.ballaprox.x,60.)
+            if self.ballon.y > 60.:
+                if self.ballon.x > GAME_WIDTH-5.:
+                    return Vector2D(self.ballonApprox.x,60.)
                 return Vector2D(GAME_WIDTH-5.,60.)
-            if self.ball.y < 30.:
-                if self.ball.x > GAME_WIDTH-5.:
-                    return Vector2D(self.ballaprox.x,30.)
+            if self.ballon.y < 30.:
+                if self.ballon.x > GAME_WIDTH-5.:
+                    return Vector2D(self.ballonApprox.x,30.)
                 return Vector2D(GAME_WIDTH-5.,30.)
-            if self.ball.x > GAME_WIDTH-10.:
-                return self.ballaprox
-            return Vector2D(GAME_WIDTH-10.,self.ballaprox.y)
+            if self.ballon.x > GAME_WIDTH-10.:
+                return self.ballonApprox
+            return Vector2D(GAME_WIDTH-10.,self.ballonApprox.y)
 
     @property #Posicion donde debe estar el defensa
-    def posDefensa(self):
+    def posDefenseur(self):
         if self.id_team == 1:
-            if self.ball.x > 70:
-                return Vector2D(70.,self.ballaprox.y)
-            return self.ballaprox
+            if self.ballon.x > 70:
+                return Vector2D(70.,self.ballonApprox.y)
+            return self.ballonApprox
         if self.id_team == 2:
-            if self.ball.x < 80.:
-                return Vector2D(80.,self.ballaprox.y)
-            return self.ballaprox
+            if self.ballon.x < 80.:
+                return Vector2D(80.,self.ballonApprox.y)
+            return self.ballonApprox
     
     @property #Posicion donde debe estar el delantero
-    def posDelantero(self):
-        if len(self.liste_mates) == 1:
-            return self.ballaprox
+    def posAttaquant(self):
+        if len(self.listeEquipe) == 1:
+            return self.ballonApprox
         if self.id_team == 1:
-            if self.ball.x < 60.:
-                return Vector2D(60.,self.ballaprox.y)
-            return self.ballaprox
+            if self.ballon.x < 60.:
+                return Vector2D(60.,self.ballonApprox.y)
+            return self.ballonApprox
         if self.id_team == 2:
-            if self.ball.x > 90.:
-                return Vector2D(90.,self.ballaprox.y)
-            return self.ballaprox
+            if self.ballon.x > 90.:
+                return Vector2D(90.,self.ballonApprox.y)
+            return self.ballonApprox
 
     @property #Devuelve si hay un compañero muy cerca
-    def isNearMate(self):
-        d = teammatecercano(self).position.distance(self.player)
+    def estProcheCoequipier(self):
+        d = coequipierProche(self).position.distance(self.joueur)
         if d <= 5.:
             return True
         if d > 5.:
@@ -122,33 +122,33 @@ class SuperState(object):
     
     @property
     def meDesmarco(self): #Devuelves si se debe de desmarcar
-        if distanciaBalon(teammatecercano(self),self) < distanciaBalon(self.state.player_state(self.id_team,self.id_player),self):
+        player = self.state.player_state(self.id_team,self.id_player)
+        if distanceBallon(coequipierProche(self),self) < distanceBallon(player,self):
             return True
         else:
             return False
 
     @property
     def deboChutar(self): #Devuelve si debe chutar a porteria
-        if distanciaPorteria(self) < 35. and self.ball.y > 30. and self.ball.y < 60.:
+        if distanceBut(self) < 35. and self.ballon.y > 30. and self.ballon.y < 60.:
             return True
         else:
             return False
 
     @property
     def deboPasar(self): #Devuelve si debe pasar el balon
-        if distanceadvproche(self.id_player,self) < 2. and self.nbteammates > 1:
+        if distanceAdvProche(self.id_player,self) < 2. and self.nbTeammates > 1:
             return True
         else:
             return False
 
     @property
     def deboDespejar(self): #Devuelve si debe despejar el balon
-        if distanciaPlayer(teammatecercano(self),self) > distanceadvproche(self.id_player,self):
+        if distanceJoueur(coequipierProche(self),self) > distanceAdvProche(self.id_player,self):
             return True
         else:
             return False
     
     @property
-    def nbteammates(self): #Devuelve el numero de jugadores de su equipo
-        return len(self.liste_mates)
-    
+    def nbTeammates(self): #Devuelve el numero de jugadores de su equipo
+        return len(self.listeEquipe)

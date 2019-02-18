@@ -20,7 +20,7 @@ class EstrategiaSimple(Strategy):
 
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state,id_team,id_player)
-        return ir_a(Vector2D(15.,17.),s)
+        return allerA(Vector2D(15.,17.),s)
 
 #Estrategia de buscar el balon y tirar
 class EstrategiaTirador(Strategy):
@@ -29,10 +29,10 @@ class EstrategiaTirador(Strategy):
 
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state,id_team,id_player)
-        if s.can_touch:
-            return chutar(0,s)
+        if s.peutToucher:
+            return tirer(0,s)
         else:
-            return ir_a(s.ball,s)
+            return allerA(s.ballon,s)
 
 #Estrategia de Portero
 class Portero(Strategy):
@@ -41,13 +41,13 @@ class Portero(Strategy):
     
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.can_touch:
+        if s.peutToucher:
             if s.deboDespejar:
-                return despejar(s)
+                return degager(s)
             else:
-                return pasar(s)
+                return passer(s)
         else:
-            return ir_a(s.posPortero,s)
+            return allerA(s.posGardien,s)
 
 #Estrategia de Defensa
 class Defensa(Strategy):
@@ -56,18 +56,18 @@ class Defensa(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.can_touch:
+        if s.peutToucher:
             if s.deboPasar:
-                return pasar(s)
+                return passer(s)
             else:
-                return avanzar(s)
+                return avancer(s)
         else:
-            if s.isNearMate:
+            if s.estProcheCoequipier:
                 if s.meDesmarco:
-                    return desmarcarse(s)
+                    return seDemarquer(s)
                 else:
-                    return ir_a(s.posDefensa,s)
-            return ir_a(s.posDefensa,s)
+                    return allerA(s.posDefenseur,s)
+            return allerA(s.posDefenseur,s)
 
 #Estrategia de Delantero
 class Delantero(Strategy):
@@ -76,18 +76,18 @@ class Delantero(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.can_touch:
+        if s.peutToucher:
             if s.deboChutar:
-                return chutar(4,s) #Chuta con fuerza 4 por optimizacion
+                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
             else:
                 if s.deboPasar:
-                    return pasar(s)
+                    return passer(s)
                 else:
-                    return avanzar(s)
+                    return avancer(s)
         else:
-            if s.isNearMate:
+            if s.estProcheCoequipier:
                 if s.meDesmarco:
-                    return desmarcarse(s)
+                    return seDemarquer(s)
                 else:
-                    return ir_a(s.posDelantero,s)
-            return ir_a(s.posDelantero,s)
+                    return allerA(s.posAttaquant,s)
+            return allerA(s.posAttaquant,s)
