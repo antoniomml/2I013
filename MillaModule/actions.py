@@ -3,8 +3,12 @@ from MillaModule.tools import *
 
 def allerA(punto,s): #Ir a un punto determinado
     v = punto-s.joueur
-    vnorm = v.normalize()*maxPlayerAcceleration
-    return SoccerAction(vnorm,0.)
+    d = punto.distance(s.joueur)
+    if d < 2:
+        return SoccerAction(0,0)
+    else:
+        vnorm = v.normalize()*maxPlayerAcceleration
+        return SoccerAction(vnorm,0.)
 
 def tirer(fuerza,s): #Chutar a porteria (fuerzamax = maxPlayerShoot = 6)
     c = s.but-s.joueur
@@ -81,8 +85,6 @@ def forceTir(distance,s):
 def lancerA(punto,s): #Lanza el balon a un punto en concreto
     v = punto-s.joueur
     distance = punto.distance(s.joueur)
-    print(distance)
-    print(forceTir(distance,s))
     vnorm = v.normalize()*forceTir(distance,s)
     return SoccerAction(0.,vnorm)
 
