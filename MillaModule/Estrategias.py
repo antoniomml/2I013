@@ -1,6 +1,7 @@
 from soccersimulator import Strategy, SoccerAction, Vector2D
 from MillaModule.tools import *
 from MillaModule.actions import *
+from soccersimulator.settings import GAME_WIDTH, GAME_HEIGHT, PLAYER_RADIUS, BALL_RADIUS, maxPlayerAcceleration, maxPlayerShoot
 
 #Estrategia de movimiento aleatorio
 class StrategieAleatoire(Strategy):
@@ -20,7 +21,11 @@ class StrategieSimple(Strategy):
 
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state,id_team,id_player)
-        return allerA(Vector2D(15.,17.),s)
+        punto = Vector2D(75.,50.)
+        if s.peutToucher:
+            return lancerA(punto,s)
+        else:
+            return allerA(s.ballonApprox,s)
 
 #Estrategia de buscar el balon y tirar
 class StrategieFonceur(Strategy):
@@ -30,7 +35,7 @@ class StrategieFonceur(Strategy):
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state,id_team,id_player)
         if s.peutToucher:
-            return tirer(0,s)
+            return tirer(maxPlayerShoot,s)
         else:
             return allerA(s.ballon,s)
 
@@ -46,7 +51,7 @@ class FonceurAmeliore(Strategy):
                 return tirer(4,s) #Chuta con fuerza 4 por optimizacion
             else:
                 if s.autrePeutTirer:
-                    return tirer(0,s)
+                    return tirer(maxPlayerShoot,s)
                 else:
                     return avancer(s)
         else:
@@ -76,7 +81,7 @@ class Defenseur(Strategy):
         s = SuperState(state,id_team,id_player)
         if s.peutToucher:
             if s.autrePeutTirer:
-                return tirer(0,s)
+                return tirer(maxPlayerShoot,s)
             if s.jeDoisPasser:
                 return passer(s)
             else:
@@ -101,7 +106,7 @@ class Attaquant(Strategy):
                 return tirer(4,s) #Chuta con fuerza 4 por optimizacion
             else:
                 if s.autrePeutTirer:
-                    return tirer(0,s)
+                    return tirer(maxPlayerShoot,s)
                 if s.jeDoisPasser:
                     return passer(s)
                 else:

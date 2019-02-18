@@ -6,9 +6,9 @@ def allerA(punto,s): #Ir a un punto determinado
     vnorm = v.normalize()*maxPlayerAcceleration
     return SoccerAction(vnorm,0.)
 
-def tirer(fuerza,s): #Chutar a porteria (si fuerza = 0 -> fuerza = maxPlayerShoot)
+def tirer(fuerza,s): #Chutar a porteria (fuerzamax = maxPlayerShoot = 6)
     c = s.but-s.joueur
-    if fuerza == 0:
+    if fuerza > maxPlayerShoot:
         cnorm = c.normalize()*maxPlayerShoot
         return SoccerAction(0.,cnorm)
     else:
@@ -62,7 +62,29 @@ def coequipierProche(s): #Dice cual es el compañero de equipo mas cercano
                 idcerca = i
     return s.state.player_state(s.id_team,idcerca)
 
-#def lancerA(s):
+def forceTir(distance,s):
+    if distance >= 60.:
+        return maxPlayerShoot
+    if distance >= 50. and distance < 60:
+        return 5
+    if distance >= 30. and distance < 50:
+        return 4
+    if distance >= 20. and distance < 30:
+        return 3
+    if distance >= 5. and distance < 20:
+        return 1
+    if distance >= 2. and distance < 5:
+        return 0.1
+    if distance < 2.:
+        return 0
+
+def lancerA(punto,s): #Lanza el balon a un punto en concreto
+    v = punto-s.joueur
+    distance = punto.distance(s.joueur)
+    print(distance)
+    print(forceTir(distance,s))
+    vnorm = v.normalize()*forceTir(distance,s)
+    return SoccerAction(0.,vnorm)
 
 def peutToucher(idteam,idplayer,s): #Devuelve si puede tocar el balon
     if s.state.player_state(idteam,idplayer).position.distance(s.ballon) > s.minDistanceBallon:
@@ -74,22 +96,8 @@ def passer(s): #Da un pase al jugador mas solo
     mate = coequipierSeul(s)
     d = distanceJoueur(mate,s)
     p = mate.position-s.joueur
-    if d >= 60.:
-        pnorm = p.normalize()*maxPlayerShoot
-        return SoccerAction(0.,pnorm)
-    if d >= 50. and d < 60:
-        pnorm = p.normalize()*5.
-        return SoccerAction(0.,pnorm)
-    if d >= 40. and d < 50:
-        pnorm = p.normalize()*4.
-        return SoccerAction(0.,pnorm)
-    if d >= 30. and d < 40:
-        pnorm = p.normalize()*4.
-        return SoccerAction(0.,pnorm)
-    if d < 30:
-        pnorm = p.normalize()*3.
-        return SoccerAction(0.,pnorm)
-    
+    pnorm = p.normalize()*forceTir(d,s)
+    return SoccerAction(0.,pnorm)
 
 def seDemarquer(s): #Se desmarca de su posicion actual
     if s.joueur.y >= 50:
