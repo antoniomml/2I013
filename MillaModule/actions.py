@@ -82,6 +82,8 @@ def forceTir(distance,s): #Da la fuerza (valor por el que multiplicar el vector)
     if distance < 2.:
         return 0
 
+def forcePasse(distance,s): #Da la fuerza (valor por el que multiplicar el vector) del pase
+
 def lancerA(punto,s): #Lanza el balon a un punto en concreto
     v = punto-s.joueurPos
     distance = punto.distance(s.joueurPos)
@@ -93,6 +95,36 @@ def peutToucher(idteam,idplayer,s): #Devuelve si puede tocar el balon
         return False
     else:
         return True
+
+def passerAToi(s): #Pasa a si mismo el balon utilizando los muros
+    mur = s.murProche
+    angle = 10
+    if s.id_team == 2:
+        angle = -angle
+    if s.joueurPos.y <= 45-2*abs(angle):
+        angleY = abs(angle)
+    if s.joueurPos.y >= 45-2*abs(angle):
+        angleY = -abs(angle)
+
+    if mur == 0: # El muro cercano es el de arriba
+        murPos = Vector2D(s.joueurPos.x+angle,GAME_HEIGHT)
+        cPos = Vector2D(s.joueurPos.x + 2*angle, s.joueurPos.y)
+    if mur == 1: # El muro cercano es el de abajo
+        murPos = Vector2D(s.joueurPos.x+angle,0)
+        cPos = Vector2D(s.joueurPos.x + 2*angle, s.joueurPos.y)
+    if mur == 2: # El muro cercano es el de izquierda
+        murPos = Vector2D(0,s.joueurPos.y+angleY)
+        cPos = Vector2D(s.joueurPos.x, s.joueurPos.y + 2*angleY)
+    if mur == 3: # El muro cercano es el de derecha
+        murPos = Vector2D(GAME_WIDTH,s.joueurPos.y+angleY)
+        cPos = Vector2D(s.joueurPos.x, s.joueurPos.y + 2*angleY)
+
+    d = s.joueurPos.distance(murPos)
+    p = murPos - s.joueurPos
+    pnorm = p.normalize()*forcePasse(d,s)
+    c = cPos - s.joueurPos
+    cnorm = c.normalize()*maxPlayerAcceleration
+    return SoccerAction(cnorm,pnorm)
 
 def passer(s): #Da un pase al jugador mas solo
     mate = coequipierSeul(s)

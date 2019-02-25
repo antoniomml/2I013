@@ -22,8 +22,9 @@ class StrategieSimple(Strategy):
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state,id_team,id_player)
         punto = Vector2D(75.,50.)
+
         if s.peutToucher:
-            return lancerA(punto,s)
+            return passerAToi(s)
         else:
             return allerA(s.ballonApprox,s)
 

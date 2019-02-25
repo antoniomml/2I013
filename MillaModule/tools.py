@@ -173,7 +173,6 @@ class SuperState(object):
                 if distanceBallon(self.joueur,self) < 10.:
                     return True
         return False
-                
     
     @property #Devuelve el numero de jugadores de su equipo
     def nbCoequipiers(self):
@@ -190,3 +189,13 @@ class SuperState(object):
             return True
         else:
             return False
+    
+    @property #Devuelve el muro mas proximo (0-Arriba 1-Abajo 2-Izquierda 3-Derecha)
+    def murProche(self):
+        dArriba = self.joueurPos.distance(Vector2D(self.joueurPos.x,GAME_HEIGHT))
+        dAbajo = self.joueurPos.distance(Vector2D(self.joueurPos.x,0))
+        dIzq = self.joueurPos.distance(Vector2D(0,self.joueurPos.y))
+        dDer = self.joueurPos.distance(Vector2D(GAME_WIDTH,self.joueurPos.y))
+        lista = [dArriba,dAbajo,dIzq,dDer]
+        minimo = min(lista)
+        return lista.index(minimo)
