@@ -44,13 +44,25 @@ def adversairePlusProche(idplayer,s): #Dice cual es el adversario mas cercano a 
                 advcercano = s.state.player_state(s.equipeEnnemi,i)
     return advcercano
 
+def adversairesProches(distance,s): #Devuelve una lista con los adversarios cercanos a una distancia
+    lista = []
+    for i in s.listeEnnemi:
+            adv = s.state.player_state(s.equipeEnnemi,i)
+            if distanceIdJoueur(s.equipeEnnemi,i,s) < distance:
+                lista.append(adv)
+    return lista
+
 def coequipierSeul(s): #Dice cual es el compañero de equipo que está mas alejado de los adversarios
     if s.nbCoequipiers == 1:
         return s.state.player_state(s.id_team,s.id_player)
-    idsolo = 0
+    if s.id_player == 0:
+        idsolo = 1
+    else:
+        idsolo = 0
     for i in range(1,len(s.listeEquipe)):
-        if distanceAdvProche(i,s) > distanceAdvProche(idsolo,s): #?
-            idsolo = i
+        if distanceAdvProche(i,s) > distanceAdvProche(idsolo,s):
+            if i != s.id_player:
+                idsolo = i
     return s.state.player_state(s.id_team,idsolo)
 
 def coequipierProche(s): #Dice cual es el compañero de equipo mas cercano
@@ -77,12 +89,22 @@ def forceTir(distance,s): #Da la fuerza (valor por el que multiplicar el vector)
         return 3
     if distance >= 5. and distance < 20:
         return 1
-    if distance >= 2. and distance < 5:
+    if distance > s.minDistanceBallon and distance < 5:
         return 0.1
-    if distance < 2.:
+    if distance <= s.minDistanceBallon:
         return 0
 
 def forcePasse(distance,s): #Da la fuerza (valor por el que multiplicar el vector) del pase
+    if distance >= 40.:
+        return maxPlayerShoot
+    if distance >= 30. and distance < 40:
+        return 5
+    if distance >= 20. and distance < 30:
+        return 4
+    if distance >= 5. and distance < 20:
+        return 2
+    if distance < 5:
+        return 1
 
 def lancerA(punto,s): #Lanza el balon a un punto en concreto
     v = punto-s.joueurPos
@@ -152,8 +174,24 @@ def seDemarquer(s): #Se desmarca de su posicion actual
             dnorm = d.normalize()*maxPlayerAcceleration
             return SoccerAction(dnorm,0.)
 
-def avancer(s): #Avanza dando pequenos toques al balon
+def avancerVersBut(s): #Avanza a la porteria dando pequenos toques al balon
     v = s.but-s.joueurPos
+    vnorm = v.normalize()*2.5
+    return SoccerAction(vnorm,vnorm/2)
+
+def avancer(s): #Avanza por la banda hasta que se acerca
+    pos = s.ballon
+    if s.id_team == 1:
+        if s.joueurPos.y <= 45 and s.joueurPos.y >= 30. and s.joueurPos.x < 100.:
+            pos = Vector2D(s.joueurPos.x+1,s.joueurPos.y-1)
+        if s.joueurPos.y > 45 and s.joueurPos.y <= GAME_HEIGHT-30. and s.joueurPos.x < 100.:
+            pos = Vector2D(s.joueurPos.x+1,s.joueurPos.y+1)
+    if s.id_team == 2:
+        if s.joueurPos.y <= 45 and s.joueurPos.y >= 30. and s.joueurPos.x > 50.:
+            pos = Vector2D(s.joueurPos.x-1,s.joueurPos.y-1)
+        if s.joueurPos.y > 45 and s.joueurPos.y <= GAME_HEIGHT-30. and s.joueurPos.x > 50.:
+            pos = Vector2D(s.joueurPos.x-1,s.joueurPos.y+1)
+    v = pos-s.joueurPos
     vnorm = v.normalize()*2.5
     return SoccerAction(vnorm,vnorm/2)
 
@@ -167,3 +205,4 @@ def degager(s): #Despeja el balon hacia un jugador o hacia la porteria con fuerz
         v = s.but-s.joueurPos
         vnorm = v.normalize()*maxPlayerShoot
         return SoccerAction(0.,vnorm)
+

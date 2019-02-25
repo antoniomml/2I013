@@ -14,6 +14,28 @@ class StrategieAleatoire(Strategy):
         return SoccerAction(Vector2D.create_random(),
                             Vector2D.create_random())
 
+
+def estrategiaEstandar(posicion,s): 
+    if s.peutToucher:
+        if s.jeDoisTirer:
+            return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+        elif s.autrePeutTirer:
+            return tirer(maxPlayerShoot,s)
+        elif s.jeDoisPasserAMoi:
+            return passerAToi(s)
+        elif s.jeDoisPasser:
+            return passer(s)
+        elif s.autreEstDevant:
+            return avancer(s)
+        else:
+            return avancerVersBut(s)
+    else:
+        if s.estProcheCoequipier:
+            if s.meDemarque:
+                return seDemarquer(s)
+        else:
+            return allerA(posicion,s)
+
 #Estrategia Simple (para prueba de acciones)
 class StrategieSimple(Strategy):
     def __init__(self):
@@ -24,7 +46,16 @@ class StrategieSimple(Strategy):
         punto = Vector2D(75.,50.)
 
         if s.peutToucher:
-            return passerAToi(s)
+            if s.jeDoisTirer:
+                return tirer(4,s)
+            else:
+                if s.jeDoisPasserAMoi:
+                    return passerAToi(s)
+                else:
+                    if s.autreEstDevant:
+                        return avancer(s)
+                    else:
+                        return avancerVersBut(s)
         else:
             return allerA(s.ballonApprox,s)
 
@@ -47,16 +78,7 @@ class FonceurAmeliore(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.peutToucher:
-            if s.jeDoisTirer:
-                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
-            else:
-                if s.autrePeutTirer:
-                    return tirer(maxPlayerShoot,s)
-                else:
-                    return avancer(s)
-        else:
-            return allerA(s.posFonceur,s)
+        return estrategiaEstandar(s.posFonceur,s)
 
 #Estrategia de Portero
 class Gardien(Strategy):
@@ -82,20 +104,7 @@ class Defenseur(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.peutToucher:
-            if s.autrePeutTirer:
-                return tirer(maxPlayerShoot,s)
-            if s.jeDoisPasser:
-                return passer(s)
-            else:
-                return avancer(s)
-        else:
-            if s.estProcheCoequipier:
-                if s.meDemarque:
-                    return seDemarquer(s)
-                else:
-                    return allerA(s.posDefenseur,s)
-            return allerA(s.posDefenseur,s)
+        return estrategiaEstandar(s.posDefenseur,s)
 
 #Estrategia de Delantero
 class Attaquant(Strategy):
@@ -104,20 +113,4 @@ class Attaquant(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        if s.peutToucher:
-            if s.jeDoisTirer:
-                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
-            else:
-                if s.autrePeutTirer:
-                    return tirer(maxPlayerShoot,s)
-                if s.jeDoisPasser:
-                    return passer(s)
-                else:
-                    return avancer(s)
-        else:
-            if s.estProcheCoequipier:
-                if s.meDemarque:
-                    return seDemarquer(s)
-                else:
-                    return allerA(s.posAttaquant,s)
-            return allerA(s.posAttaquant,s)
+        return estrategiaEstandar(s.posAttaquant,s)
