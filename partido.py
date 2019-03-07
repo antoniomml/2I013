@@ -7,11 +7,11 @@ team2 = SoccerTeam(name="Barcelona")
 
 # Creacion de jugadores
 team1.add("Gareth Bale", StrategieFonceur())
-#team1.add("Sergio Ramos", Defenseur())
+team1.add("Sergio Ramos", Defenseur())
 team1.add("Courtois", Gardien())
 
 team2.add("Lionel Messi", FonceurAmeliore())
-#team2.add("Gerard Pique", Defenseur())
+team2.add("Gerard Pique", Defenseur())
 team2.add("Ter Stegen", Gardien())
 
 # Creacion del partido

@@ -7,15 +7,18 @@ class SuperState(object):
         self.state = state
         self.id_team = id_team
         self.id_player = id_player
-        self.joueur = state.player_state(id_team,id_player)
     
     @property #Posicion de la pelota
     def ballon(self):
         return self.state.ball.position
-
+    
+    @property #Jugador que ejecuta la estrategia
+    def joueur(self):
+        return self.state.player_state(self.id_team,self.id_player)
+    
     @property #Posicion del jugador que ejecuta la estrategia
     def joueurPos(self):
-        return self.state.player_state(self.id_team,self.id_player).position
+        return self.joueur.position
 
     @property #Posicion de la porteria contraria
     def but(self):
@@ -122,12 +125,12 @@ class SuperState(object):
         if self.autreEstDevant:
             return self.ballonApprox
         if self.id_team == 1:
-            if self.ballon.x > 80:
-                return Vector2D(80.,self.ballonApprox.y)
+            if self.ballon.x > 40:
+                return Vector2D(40.,self.ballonApprox.y)
             return self.ballonApprox
         if self.id_team == 2:
-            if self.ballon.x < 70.:
-                return Vector2D(70.,self.ballonApprox.y)
+            if self.ballon.x < 110.:
+                return Vector2D(110.,self.ballonApprox.y)
             return self.ballonApprox
     
     @property #Posicion donde debe estar el delantero
@@ -241,3 +244,43 @@ class SuperState(object):
         lista = [dArriba,dAbajo,dIzq,dDer]
         minimo = min(lista)
         return lista.index(minimo)
+
+    @property
+    def quiALeBallon(self):
+        mini = self.state.player_state(self.id_team,self.id_player)
+        for idteam, idplayer in self.state.players:
+            j = self.state.player_state(idteam,idplayer)
+            dBallon = distanceBallon(j.position,self)
+            if dBallon <= self.minDistanceBallon:
+                if dBallon <= distanceBallon(mini.position):
+                    mini = j
+        return mini
+    
+    @property
+    def onALeBallon(self): 
+        mini = self.joueur
+        team = self.id_team
+        for idteam, idplayer in self.state.players:
+            j = self.state.player_state(idteam,idplayer)
+            dBallon = distanceBallon(j,self)
+            if dBallon <= self.minDistanceBallon:
+                if dBallon <= distanceBallon(mini,self):
+                    mini = j
+                    team = idteam
+        if team == self.id_team:
+            return True
+        if team == self.equipeEnnemi:
+            return False
+
+    @property
+    def xAttaquantEnnemi(self):
+        maxi = self.joueur
+        for idplayer in self.listeEnnemi:
+            p = self.state.player_state(self.equipeEnnemi,idplayer)
+            if self.equipeEnnemi == 1:
+                if p.position.x > maxi.position.x:
+                    maxi = p
+            if self.equipeEnnemi == 2:
+                if p.position.x < maxi.position.x:
+                    maxi = p
+        return maxi.position.x

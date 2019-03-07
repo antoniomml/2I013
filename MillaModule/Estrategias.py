@@ -14,28 +14,6 @@ class StrategieAleatoire(Strategy):
         return SoccerAction(Vector2D.create_random(),
                             Vector2D.create_random())
 
-
-def estrategiaEstandar(posicion,s): 
-    if s.peutToucher:
-        if s.jeDoisTirer:
-            return tirer(4,s) #Chuta con fuerza 4 por optimizacion
-        elif s.autrePeutTirer:
-            return tirer(maxPlayerShoot,s)
-        elif s.jeDoisPasserAMoi:
-            return passerAToi(s)
-        elif s.jeDoisPasser:
-            return passer(s)
-        elif s.autreEstDevant:
-            return avancer(s)
-        else:
-            return avancerVersBut(s)
-    else:
-        if s.estProcheCoequipier:
-            if s.meDemarque:
-                return seDemarquer(s)
-        else:
-            return allerA(posicion,s)
-
 #Estrategia Simple (para prueba de acciones)
 class StrategieSimple(Strategy):
     def __init__(self):
@@ -78,7 +56,30 @@ class FonceurAmeliore(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        return estrategiaEstandar(s.posFonceur,s)
+        pos = s.posFonceur
+        if not s.peutToucher:
+            if s.estProcheCoequipier:
+                if s.meDemarque:
+                    return seDemarquer(s)
+            else:
+                return allerA(pos,s)
+        else:
+            return estrategiaEstandar(pos,s)
+
+def estrategiaEstandar(posicion,s): 
+    if s.peutToucher:
+        if s.jeDoisTirer:
+            return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+        elif s.autrePeutTirer:
+            return tirer(maxPlayerShoot,s)
+        elif s.jeDoisPasserAMoi:
+            return passerAToi(s)
+        elif s.jeDoisPasser:
+            return passer(s)
+        elif s.autreEstDevant and s.onALeBallon:
+            return avancer(s)
+        else:
+            return avancerVersBut(s)
 
 #Estrategia de Portero
 class Gardien(Strategy):
@@ -104,7 +105,17 @@ class Defenseur(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        return estrategiaEstandar(s.posDefenseur,s)
+        pos = s.posDefenseur
+        if not s.peutToucher:
+            if s.id_team == 1:
+                if s.xAttaquantEnnemi < s.joueurPos.x + 5:
+                    if not jeSuisEnPos(pos,s):
+                        return allerA(pos,s)
+            if s.id_team == 2:
+                if s.xAttaquantEnnemi > s.joueurPos.x - 5:
+                    if not jeSuisEnPos(pos,s):
+                        return allerA(pos,s)
+        return estrategiaEstandar(pos,s)
 
 #Estrategia de Delantero
 class Attaquant(Strategy):
@@ -113,4 +124,12 @@ class Attaquant(Strategy):
 
     def compute_strategy(self,state,id_team,id_player):
         s = SuperState(state,id_team,id_player)
-        return estrategiaEstandar(s.posAttaquant,s)
+        pos = s.posAttaquant
+        if not s.peutToucher:
+            if s.estProcheCoequipier:
+                if s.meDemarque:
+                    return seDemarquer(s)
+            else:
+                return allerA(pos,s)
+        else:
+            return estrategiaEstandar(pos,s)

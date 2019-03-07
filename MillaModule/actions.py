@@ -118,6 +118,12 @@ def peutToucher(idteam,idplayer,s): #Devuelve si puede tocar el balon
     else:
         return True
 
+def jeSuisEnPos(posicion,s): #Devuelve si estoy en posicion
+    if s.joueurPos.x >= posicion.x - 2 and s.joueurPos.x <= posicion.x + 2:
+        return True
+    else:
+        return False
+
 def passerAToi(s): #Pasa a si mismo el balon utilizando los muros
     mur = s.murProche
     angle = 10
