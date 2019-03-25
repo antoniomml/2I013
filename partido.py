@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 from soccersimulator import SoccerTeam, Simulation, show_simu
 from MillaModule.Estrategias import *
 

@@ -107,15 +107,26 @@ class Defenseur(Strategy):
         s = SuperState(state,id_team,id_player)
         pos = s.posDefenseur
         if not s.peutToucher:
-            if s.id_team == 1:
-                if s.xAttaquantEnnemi < s.joueurPos.x + 5:
-                    if not jeSuisEnPos(pos,s):
-                        return allerA(pos,s)
-            if s.id_team == 2:
-                if s.xAttaquantEnnemi > s.joueurPos.x - 5:
-                    if not jeSuisEnPos(pos,s):
-                        return allerA(pos,s)
-        return estrategiaEstandar(pos,s)
+            #if s.joueurPos.x > s.xAttaquantEnnemi:
+
+            if s.estProcheCoequipier:
+                if s.meDemarque:
+                    return seDemarquer(s)
+            else:
+                return allerA(pos,s)
+        else:
+            if s.jeDoisTirer:
+                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
+            elif s.jeDoisPasser:
+                return passer(s)
+            elif s.autreEstDevant and s.onALeBallon:
+                return avancer(s)
+            else:
+                return avancerVersBut(s)
 
 #Estrategia de Delantero
 class Attaquant(Strategy):
