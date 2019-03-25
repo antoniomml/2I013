@@ -61,25 +61,20 @@ class FonceurAmeliore(Strategy):
             if s.estProcheCoequipier:
                 if s.meDemarque:
                     return seDemarquer(s)
+            return allerA(pos,s)
+        else:
+            if s.jeDoisTirer:
+                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
+            elif s.jeDoisPasser:
+                return passer(s)
+            elif s.autreEstDevant:
+                return avancer(s)
             else:
-                return allerA(pos,s)
-        else:
-            return estrategiaEstandar(pos,s)
-
-def estrategiaEstandar(posicion,s): 
-    if s.peutToucher:
-        if s.jeDoisTirer:
-            return tirer(4,s) #Chuta con fuerza 4 por optimizacion
-        elif s.autrePeutTirer:
-            return tirer(maxPlayerShoot,s)
-        elif s.jeDoisPasserAMoi:
-            return passerAToi(s)
-        elif s.jeDoisPasser:
-            return passer(s)
-        elif s.autreEstDevant and s.onALeBallon:
-            return avancer(s)
-        else:
-            return avancerVersBut(s)
+                return avancerVersBut(s)
 
 #Estrategia de Portero
 class Gardien(Strategy):
@@ -107,14 +102,15 @@ class Defenseur(Strategy):
         s = SuperState(state,id_team,id_player)
         pos = s.posDefenseur
         if not s.peutToucher:
-            #if s.joueurPos.x > s.xAttaquantEnnemi:
-
-            if s.estProcheCoequipier:
+            if s.jeDoisSortir:
+                return allerA(s.ballonApprox,s)
+            elif s.estProcheCoequipier:
                 if s.meDemarque:
                     return seDemarquer(s)
-            else:
-                return allerA(pos,s)
+            return allerA(pos,s)
         else:
+            if not jeSuisEnPos(pos,s) and s.autreEstDevant:
+                return passer(s)
             if s.jeDoisTirer:
                 return tirer(4,s) #Chuta con fuerza 4 por optimizacion
             elif s.autrePeutTirer:
@@ -123,12 +119,12 @@ class Defenseur(Strategy):
                 return passerAToi(s)
             elif s.jeDoisPasser:
                 return passer(s)
-            elif s.autreEstDevant and s.onALeBallon:
+            elif s.autreEstDevant:
                 return avancer(s)
             else:
                 return avancerVersBut(s)
 
-#Estrategia de Delantero
+#Estrategia de Delantero Solitario
 class Attaquant(Strategy):
     def __init__(self):
         Strategy.__init__(self,"Attaquant")
@@ -140,7 +136,71 @@ class Attaquant(Strategy):
             if s.estProcheCoequipier:
                 if s.meDemarque:
                     return seDemarquer(s)
-            else:
-                return allerA(pos,s)
+            return allerA(pos,s)
         else:
-            return estrategiaEstandar(pos,s)
+            if s.jeDoisTirer:
+                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
+            elif s.jeDoisPasser:
+                return passer(s)
+            elif s.autreEstDevant:
+                return avancer(s)
+            else:
+                return avancerVersBut(s)
+
+#Estrategia de Delantero Derecho
+class AttaquantDroit(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"AttaquantDroit")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        pos = s.posAttaquantDroit
+        if not s.peutToucher:
+            if s.estProcheCoequipier:
+                if s.meDemarque:
+                    return seDemarquer(s)
+            return allerA(pos,s)
+        else:
+            if s.jeDoisTirer:
+                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
+            elif s.jeDoisPasser:
+                return passer(s)
+            elif s.autreEstDevant:
+                return avancer(s)
+            else:
+                return avancerVersBut(s)
+
+#Estrategia de Delantero Izquierdo
+class AttaquantGauche(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"AttaquantGauche")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        pos = s.posAttaquantGauche
+        if not s.peutToucher:
+            if s.estProcheCoequipier:
+                if s.meDemarque:
+                    return seDemarquer(s)
+            return allerA(pos,s)
+        else:
+            if s.jeDoisTirer:
+                return tirer(4,s) #Chuta con fuerza 4 por optimizacion
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
+            elif s.jeDoisPasser:
+                return passer(s)
+            elif s.autreEstDevant:
+                return avancer(s)
+            else:
+                return avancerVersBut(s)

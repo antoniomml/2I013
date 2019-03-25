@@ -78,17 +78,17 @@ class SuperState(object):
             dif = pos.x - GAME_WIDTH
             return Vector2D(GAME_WIDTH-dif,pos.y)
 
-    @property
+    @property #Posicion donde debe estar el tirador
     def posFonceur(self):
         if self.nbCoequipiers == 1:
             return self.ballonApprox
         if self.id_team == 1:
-            if self.ballon.x < 40:
+            if self.ballonApprox.x < 40:
                 return Vector2D(40.,self.ballonApprox.y)
             else:
                 return self.ballonApprox
         if self.id_team == 2:
-            if self.ballon.x > GAME_WIDTH-40.:
+            if self.ballonApprox.x > GAME_WIDTH-40.:
                 return Vector2D(GAME_WIDTH-40.,self.ballonApprox.y)
             else:
                 return self.ballonApprox
@@ -96,54 +96,101 @@ class SuperState(object):
     @property #Posicion donde debe estar el portero
     def posGardien(self):
         if self.id_team == 1:
-            if self.ballon.y > 60.:
+            if self.ballonApprox.y > 60.:
                 if self.ballon.x < 5.:
                     return Vector2D(self.ballonApprox.x,60.)
                 return Vector2D(5.,60.)
-            if self.ballon.y < 30.:
-                if self.ballon.x < 5.:
+            if self.ballonApprox.y < 30.:
+                if self.ballonApprox.x < 5.:
                     return Vector2D(self.ballonApprox.x,30.)
                 return Vector2D(5.,30.)
-            if self.ballon.x < 10.:
+            if self.ballonApprox.x < 10.:
                 return self.ballonApprox
             return Vector2D(10.,self.ballonApprox.y)
         if self.id_team == 2:
-            if self.ballon.y > 60.:
-                if self.ballon.x > GAME_WIDTH-5.:
+            if self.ballonApprox.y > 60.:
+                if self.ballonApprox.x > GAME_WIDTH-5.:
                     return Vector2D(self.ballonApprox.x,60.)
                 return Vector2D(GAME_WIDTH-5.,60.)
-            if self.ballon.y < 30.:
-                if self.ballon.x > GAME_WIDTH-5.:
+            if self.ballonApprox.y < 30.:
+                if self.ballonApprox.x > GAME_WIDTH-5.:
                     return Vector2D(self.ballonApprox.x,30.)
                 return Vector2D(GAME_WIDTH-5.,30.)
-            if self.ballon.x > GAME_WIDTH-10.:
+            if self.ballonApprox.x > GAME_WIDTH-10.:
                 return self.ballonApprox
             return Vector2D(GAME_WIDTH-10.,self.ballonApprox.y)
 
     @property #Posicion donde debe estar el defensa
     def posDefenseur(self):
-        if self.autreEstDevant:
-            return self.ballonApprox
         if self.id_team == 1:
-            if self.ballon.x > 40:
+            if self.ballonApprox.x > 40:
                 return Vector2D(40.,self.ballonApprox.y)
+            if distanceIdJoueur(2,self.idEnnemiPlusAvance,self) > 5. and self.ballonApprox.x > self.joueurPos.x:
+                posj = self.ennemiPlusAvance.position.x
+                return Vector2D(posj/2,self.ballonApprox.y)
             return self.ballonApprox
         if self.id_team == 2:
-            if self.ballon.x < 110.:
+            if self.ballonApprox.x < 110.:
                 return Vector2D(110.,self.ballonApprox.y)
+            if distanceIdJoueur(1,self.idEnnemiPlusAvance,self) > 5. and self.ballonApprox.x < self.joueurPos.x:
+                posj = self.ennemiPlusAvance.position.x
+                xpos = ((GAME_WIDTH-posj)/2)+posj
+                return Vector2D(xpos,self.ballonApprox.y)
             return self.ballonApprox
     
-    @property #Posicion donde debe estar el delantero
+    @property #Posicion donde debe estar el delantero solitario
     def posAttaquant(self):
         if self.nbCoequipiers == 1:
             return self.ballonApprox
         if self.id_team == 1:
-            if self.ballon.x < 45.:
+            if self.ballonApprox.x < 45.:
                 return Vector2D(45.,self.ballonApprox.y)
             return self.ballonApprox
         if self.id_team == 2:
-            if self.ballon.x > 105.:
+            if self.ballonApprox.x > 105.:
                 return Vector2D(105.,self.ballonApprox.y)
+            return self.ballonApprox
+
+    @property #Posicion donde debe estar el delantero derecho
+    def posAttaquantDroit(self):
+        if self.nbCoequipiers == 1:
+            return self.ballonApprox
+        if self.id_team == 1:
+            if self.ballonApprox.x < 45.:
+                if self.ballonApprox.y > 50.:
+                    return Vector2D(45.,50.)
+                return Vector2D(45.,self.ballonApprox.y)
+            if self.ballonApprox.y > 50.:
+                return Vector2D(self.ballonApprox.x,50.)
+            return self.ballonApprox
+        if self.id_team == 2:
+            if self.ballonApprox.x > 105.:
+                if self.ballonApprox.y < 40.:
+                    return Vector2D(105.,40.)
+                return Vector2D(105.,self.ballonApprox.y)
+            if self.ballonApprox.y < 40:
+                return Vector2D(self.ballonApprox.x,40.)
+            return self.ballonApprox
+
+    @property #Posicion donde debe estar el delantero izquierdo
+    def posAttaquantGauche(self):
+        if self.nbCoequipiers == 1:
+            return self.ballonApprox
+        if self.id_team == 1:
+            if self.ballonApprox.x < 45.:
+                if self.ballonApprox.y < 40.:
+                    return Vector2D(45.,40.)
+                return Vector2D(45.,self.ballonApprox.y)
+            if self.ballonApprox.y < 40.:
+                return Vector2D(self.ballonApprox.x,40.)
+            return self.ballonApprox
+        if self.id_team == 2:
+            if self.ballonApprox.x > 105.:
+                if self.ballonApprox.y > 50.:
+                    return Vector2D(105.,50.)
+                return Vector2D(105.,self.ballonApprox.y)
+            if self.ballonApprox.y > 50:
+                return Vector2D(self.ballonApprox.x,50.)
             return self.ballonApprox
 
     @property #Devuelve si hay un compañero muy cerca
@@ -171,17 +218,17 @@ class SuperState(object):
 
     @property #Devuelve si debe pasar el balon
     def jeDoisPasser(self):
-        if distanceAdvProche(self.id_player,self) < 5. and self.nbCoequipiers > 1:
+        if distanceAdvProche(self.id_player,self) < 10. and self.nbCoequipiers > 1:
             return True
         else:
             return False
    
-    @property
+    @property #Devuelve si debe pasar el balon a si mismo
     def jeDoisPasserAMoi(self):
-        if self.distanceMurProche < 35. and self.autreEstDevant:
-            return True
-        else:
-            return False
+        if self.distanceMurProche < 30. and self.autreEstDevant:
+            if self.distanceMurProche < distanceJoueur(coequipierProche(self),self):
+                return True
+        return False
 
     @property #Devuelve si debe despejar el balon
     def jeDoisDegager(self):
@@ -190,12 +237,12 @@ class SuperState(object):
         else:
             return False
     
-    @property
+    @property #Devuelve si debe salir el jugador a por el balon
     def jeDoisSortir(self):
         d = distanceBallon(self.joueur,self)
         if distanceAdvProche(self.id_player,self) > d*2:
             if distanceBallon(coequipierProche(self),self) > d:
-                if distanceBallon(self.joueur,self) < 10.:
+                if distanceBallon(self.joueur,self) < 25.:
                     return True
         return False
     
@@ -215,7 +262,7 @@ class SuperState(object):
         else:
             return False
    
-    @property
+    @property #Devuelve si hay jugadores delante
     def autreEstDevant(self):
         advProches = adversairesProches(20.,self)
         for i in advProches:
@@ -245,7 +292,7 @@ class SuperState(object):
         minimo = min(lista)
         return lista.index(minimo)
 
-    @property
+    @property #Devuelve quien esta mas cerca del balón EN PROGRESO
     def quiALeBallon(self):
         mini = self.state.player_state(self.id_team,self.id_player)
         for idteam, idplayer in self.state.players:
@@ -256,7 +303,7 @@ class SuperState(object):
                     mini = j
         return mini
     
-    @property
+    @property #Devuelve si nuestro equipo tiene el balon
     def onALeBallon(self): 
         mini = self.joueur
         team = self.id_team
@@ -272,8 +319,8 @@ class SuperState(object):
         if team == self.equipeEnnemi:
             return False
 
-    @property
-    def xAttaquantEnnemi(self):
+    @property #Devuelve el adversario mas avanzado
+    def ennemiPlusAvance(self):
         maxi = self.joueur
         for idplayer in self.listeEnnemi:
             p = self.state.player_state(self.equipeEnnemi,idplayer)
@@ -283,4 +330,20 @@ class SuperState(object):
             if self.equipeEnnemi == 2:
                 if p.position.x < maxi.position.x:
                     maxi = p
-        return maxi.position.x
+        return maxi
+    
+    @property #Devuelve el id del adversario mas avanzado
+    def idEnnemiPlusAvance(self):
+        maxi = self.state.player_state(self.equipeEnnemi,0)
+        idj = -1
+        for idplayer in self.listeEnnemi:
+            p = self.state.player_state(self.equipeEnnemi,idplayer)
+            if self.equipeEnnemi == 1:
+                if p.position.x > maxi.position.x:
+                    maxi = p
+                    idj = idplayer
+            if self.equipeEnnemi == 2:
+                if p.position.x < maxi.position.x:
+                    maxi = p
+                    idj = idplayer
+        return idj

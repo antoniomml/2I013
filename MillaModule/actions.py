@@ -4,7 +4,7 @@ from MillaModule.tools import *
 def allerA(punto,s): #Ir a un punto determinado
     v = punto-s.joueurPos
     d = punto.distance(s.joueurPos)
-    if d < 2:
+    if d < 0.5:
         return SoccerAction(0,0)
     else:
         vnorm = v.normalize()*maxPlayerAcceleration
@@ -100,11 +100,11 @@ def forcePasse(distance,s): #Da la fuerza (valor por el que multiplicar el vecto
     if distance >= 30. and distance < 40:
         return 5
     if distance >= 20. and distance < 30:
-        return 4
+        return 4.5
     if distance >= 5. and distance < 20:
-        return 2
+        return 4
     if distance < 5:
-        return 1
+        return 3
 
 def lancerA(punto,s): #Lanza el balon a un punto en concreto
     v = punto-s.joueurPos
