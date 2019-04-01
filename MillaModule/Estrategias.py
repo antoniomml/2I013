@@ -16,26 +16,21 @@ class StrategieAleatoire(Strategy):
 
 #Estrategia Simple (para prueba de acciones)
 class StrategieSimple(Strategy):
-    def __init__(self):
+    def __init__(self,accion):
         Strategy.__init__(self, "Simple")
+        self.accion = accion
 
     def compute_strategy(self, state, id_team, id_player):
         s = SuperState(state,id_team,id_player)
-        punto = Vector2D(75.,50.)
-
-        if s.peutToucher:
-            if s.jeDoisTirer:
-                return tirer(4,s)
-            else:
-                if s.jeDoisPasserAMoi:
-                    return passerAToi(s)
-                else:
-                    if s.autreEstDevant:
-                        return avancer(s)
-                    else:
-                        return avancerVersBut(s)
-        else:
-            return allerA(s.ballonApprox,s)
+        if self.accion == "right":
+            punto = Vector2D(s.joueurPos.x+1,s.joueurPos.y)
+        elif self.accion == "left":
+            punto = Vector2D(s.joueurPos.x-1,s.joueurPos.y)
+        elif self.accion == "up":
+            punto = Vector2D(s.joueurPos.x,s.joueurPos.y+1)
+        elif self.accion == "down":
+            punto = Vector2D(s.joueurPos.x,s.joueurPos.y-1)
+        return SoccerAction(punto-s.joueurPos,punto-s.joueurPos)
 
 #Estrategia de buscar el balon y tirar
 class StrategieFonceur(Strategy):
