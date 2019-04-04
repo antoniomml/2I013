@@ -335,7 +335,7 @@ class SuperState(object):
     @property #Devuelve el id del adversario mas avanzado
     def idEnnemiPlusAvance(self):
         maxi = self.state.player_state(self.equipeEnnemi,0)
-        idj = -1
+        idj = 0
         for idplayer in self.listeEnnemi:
             p = self.state.player_state(self.equipeEnnemi,idplayer)
             if self.equipeEnnemi == 1:
