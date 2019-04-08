@@ -200,6 +200,7 @@ class AttaquantGauche(Strategy):
             else:
                 return avancerVersBut(s)
 
+#Estrategia de Delantero Estatico
 class AttaquantStatique(Strategy):
     def __init__(self):
         Strategy.__init__(self,"AttaquantStatique")
@@ -230,6 +231,7 @@ class AttaquantStatique(Strategy):
             else:
                 return avancerVersBut(s)
 
+#Estrategia de Centrocampista Estatico
 class MilieuStatique(Strategy):
     def __init__(self):
         Strategy.__init__(self,"MilieuStatique")
@@ -260,6 +262,7 @@ class MilieuStatique(Strategy):
             else:
                 return avancerVersBut(s)
 
+#Estrategia de Defensa Estatico
 class DefenseurStatique(Strategy):
     def __init__(self):
         Strategy.__init__(self,"DefenseurStatique")

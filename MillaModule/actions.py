@@ -75,7 +75,7 @@ def coequipierProche(s): #Dice cual es el compañero de equipo mas cercano
                 idcerca = i
     return s.state.player_state(s.id_team,idcerca)
 
-def ennemiesAuMilieu(player,s):
+def ennemiesAuMilieu(player,s): #Devuelve si hay enemigos entre dos jugadores
     d = distanceJoueur(player,s)
     advProches = adversairesProches(d,s)
     for i in advProches:
@@ -161,7 +161,6 @@ def passerAToi(s): #Pasa a si mismo el balon utilizando los muros
     return SoccerAction(cnorm,pnorm)
 
 def jeDoisPasser(pos,s): #Devuelve si debe pasar el balon
-    #mate = coequipierSeul(s)
     mate = s.coequipierPlusAvance
     if distanceAdvProche(s.id_player,s)<10 and s.nbCoequipiers>1 and not ennemiesAuMilieu(mate,s):
         return True
@@ -170,8 +169,7 @@ def jeDoisPasser(pos,s): #Devuelve si debe pasar el balon
     else:
         return False
 
-def passer(s): #Da un pase al jugador mas solo
-    #mate = coequipierSeul(s)
+def passer(s): #Da un pase al jugador mas avanzado
     mate = s.coequipierPlusAvance
     d = distanceJoueur(mate,s)
     p = mate.position-s.joueurPos

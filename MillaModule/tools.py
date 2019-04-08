@@ -193,21 +193,21 @@ class SuperState(object):
                 return Vector2D(self.ballonApprox.x,50.)
             return self.ballonApprox
 
-    @property
+    @property #Posicion donde debe estar el delantero estatico
     def posAttaquantStatique(self):
         if self.id_team == 1:
             return Vector2D(130,45)
         if self.id_team == 2:
             return Vector2D(20,45)
 
-    @property
+    @property #Posicion donde debe estar el centrocampista estatico
     def posMilieuStatique(self):
         if self.id_team == 1:
             return Vector2D(80,60)
         if self.id_team == 2:
             return Vector2D(60,30)
 
-    @property
+    @property #Posicion donde debe estar el defensor estatico
     def posDefenseurStatique(self):
         if self.id_team == 1:
             return Vector2D(30,35)
