@@ -265,5 +265,30 @@ def lancerLoin(s):
                 return lancerA(Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - GAME_HEIGHT/4),0,s)
             return lancerA(Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - 3*(GAME_HEIGHT/4)),0,s)
         if adv.position.y < GAME_HEIGHT - GAME_HEIGHT/2:
-            return lancerA(Vector2D(GAME_WIDTH/2 - (GAME_WIDTH/8),GAME_HEIGHT - GAME_HEIGHT/4),0,s)
-        return lancerA(Vector2D(GAME_WIDTH/2 - (GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4)),0,s)
+            return lancerA(Vector2D(GAME_WIDTH/2 - 3*(GAME_WIDTH/8),GAME_HEIGHT - GAME_HEIGHT/4),0,s)
+        return lancerA(Vector2D(GAME_WIDTH/2 - 3*(GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4)),0,s)
+
+def posDefense(s):
+    equipe = s.listeEquipe
+    if s.id_player == 0:
+        idmate = 1
+    else:
+        idmate = 0
+    matePos = s.state.player_state(s.id_team,idmate).position
+
+    if s.id_team == 1:
+        if matePos.x < GAME_WIDTH/4:
+            if matePos.y < GAME_HEIGHT - GAME_HEIGHT/2:
+                return Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - GAME_HEIGHT/4)
+            return Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - 3*(GAME_HEIGHT/4))
+        if matePos.y < GAME_HEIGHT - GAME_HEIGHT/2:
+            return Vector2D(GAME_WIDTH/2 - 3*(GAME_WIDTH/8),GAME_HEIGHT - GAME_HEIGHT/4)
+        return Vector2D(GAME_WIDTH/2 - 3*(GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4))
+    if s.id_team == 2:
+        if matePos.x < GAME_WIDTH - GAME_WIDTH/4:
+            if matePos.y < GAME_HEIGHT - GAME_HEIGHT/2:
+                return Vector2D(GAME_WIDTH - GAME_WIDTH/8,GAME_HEIGHT - GAME_HEIGHT/4)
+            return Vector2D(GAME_WIDTH - GAME_WIDTH/8,GAME_HEIGHT - 3*(GAME_HEIGHT/4))
+        if matePos.y < GAME_HEIGHT - GAME_HEIGHT/2:
+            return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - GAME_HEIGHT/4)
+        return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4))
