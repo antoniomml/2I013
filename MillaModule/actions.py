@@ -292,3 +292,45 @@ def posDefense(s):
         if matePos.y < GAME_HEIGHT - GAME_HEIGHT/2:
             return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - GAME_HEIGHT/4)
         return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4))
+
+def posAttaque(s):
+    if s.id_team == 1:
+        if s.ballonApprox.y > GAME_HEIGHT/2:
+            return Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - (GAME_HEIGHT/4))
+        return Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - 3*(GAME_HEIGHT/4))
+    if s.id_team == 2:
+        if s.ballonApprox.y > GAME_HEIGHT/2:
+            return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - (GAME_HEIGHT/4))
+        return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4))
+
+def posCentral(s):
+    if s.id_team == 1:
+        return Vector2D(GAME_WIDTH/2 - 3*(GAME_WIDTH/16),GAME_HEIGHT/2)
+    if s.id_team == 2:
+        return Vector2D(GAME_WIDTH/2 + 3*(GAME_WIDTH/16),GAME_HEIGHT/2)
+
+def estDansMonTerrain(s):
+    if s.id_team == 1:
+        if s.ballonApprox.x < GAME_WIDTH/2:
+            return True
+        return False
+    if s.id_team == 2:
+        if s.ballonApprox.x > GAME_WIDTH/2:
+            return True
+        return False
+
+def jeDoisLancer(s):
+    if s.id_team == 1:
+        if s.ballonApprox.x > GAME_WIDTH/2 - 5.:
+            return True
+        return False
+    if s.id_team == 2:
+        if s.ballonApprox.x < GAME_WIDTH/2 + 5.:
+            return True
+        return False
+
+def avancerVolley(s): #Avanza al centro dando pequenos toques al balon
+    but = Vector2D(GAME_WIDTH/2,s.ballonApprox.y)
+    v = but-s.joueurPos
+    vnorm = v.normalize()*2.5
+    return SoccerAction(vnorm,vnorm/2)
