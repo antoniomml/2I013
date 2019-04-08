@@ -1,5 +1,8 @@
 from soccersimulator import Vector2D, SoccerAction
 from MillaModule.tools import *
+from soccersimulator.settings import GAME_WIDTH, GAME_HEIGHT, PLAYER_RADIUS, BALL_RADIUS, maxPlayerAcceleration, maxPlayerShoot
+
+from random import randint
 
 def allerA(punto,s): #Ir a un punto determinado
     v = punto-s.joueurPos
@@ -112,10 +115,13 @@ def forcePasse(distance,s): #Da la fuerza (valor por el que multiplicar el vecto
     if distance < 5:
         return 2.5
 
-def lancerA(punto,s): #Lanza el balon a un punto en concreto
+def lancerA(punto,force,s): #Lanza el balon a un punto en concreto
     v = punto-s.joueurPos
     distance = punto.distance(s.joueurPos)
-    vnorm = v.normalize()*forceTir(distance,s)
+    if force == 0:
+        vnorm = v.normalize()*forceTir(distance,s)
+    else:
+        vnorm = v.normalize()*maxPlayerShoot
     return SoccerAction(0.,vnorm)
 
 def peutToucher(idteam,idplayer,s): #Devuelve si puede tocar el balon
@@ -227,3 +233,37 @@ def degager(s): #Despeja el balon hacia un jugador o hacia la porteria con fuerz
         vnorm = v.normalize()*maxPlayerShoot
         return SoccerAction(0.,vnorm)
 
+#####################################################################################
+#
+# TODO LO DE ABAJO ES PARA EL TME SOLO
+#
+#####################################################################################
+
+def adversaireAleatoire(s):
+    nb = randint(0,s.nbAdversaires-1)
+    adversaires = s.listeEnnemi
+    adv = s.state.player_state(s.equipeEnnemi, adversaires[nb])
+    return adv
+
+def passerAuContraire(s):
+    adv = adversaireAleatoire(s)
+    return lancerA(adv.position,0,s)
+
+def lancerLoin(s):
+    adv = adversaireAleatoire(s)
+    if s.id_team == 1:
+        if adv.position.x < GAME_WIDTH - GAME_WIDTH/4:
+            if adv.position.y < GAME_HEIGHT - GAME_HEIGHT/2:
+                return lancerA(Vector2D(GAME_WIDTH - GAME_WIDTH/8,GAME_HEIGHT - GAME_HEIGHT/4),0,s)
+            return lancerA(Vector2D(GAME_WIDTH - GAME_WIDTH/8,GAME_HEIGHT - 3*(GAME_HEIGHT/4)),0,s)
+        if adv.position.y < GAME_HEIGHT - GAME_HEIGHT/2:
+            return lancerA(Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - GAME_HEIGHT/4),0,s)
+        return lancerA(Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4)),0,s)
+    if s.id_team == 2:
+        if adv.position.x < GAME_WIDTH/4:
+            if adv.position.y < GAME_HEIGHT - GAME_HEIGHT/2:
+                return lancerA(Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - GAME_HEIGHT/4),0,s)
+            return lancerA(Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - 3*(GAME_HEIGHT/4)),0,s)
+        if adv.position.y < GAME_HEIGHT - GAME_HEIGHT/2:
+            return lancerA(Vector2D(GAME_WIDTH/2 - (GAME_WIDTH/8),GAME_HEIGHT - GAME_HEIGHT/4),0,s)
+        return lancerA(Vector2D(GAME_WIDTH/2 - (GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4)),0,s)

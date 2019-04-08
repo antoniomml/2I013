@@ -290,6 +290,10 @@ class SuperState(object):
     def nbCoequipiers(self):
         return len(self.listeEquipe)
 
+    @property #Devuelve el numero de jugadores del otro equipo
+    def nbAdversaires(self):
+        return len(self.listeEnnemi)
+
     @property #Devuelve si alguien mas puede tocar el balon
     def autrePeutTirer(self):
         liste = []
