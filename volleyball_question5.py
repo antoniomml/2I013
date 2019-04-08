@@ -13,10 +13,13 @@ class Attaque(Strategy):
         s = SuperState(state,id_team,id_player)
         pos = posAttaque(s)
         if not s.peutToucher:
-            if s.jeSuisProche:
+            if s.jeSuisProche and estDansMonTerrain(s):
                 return allerA(s.ballonApprox,s)
             return allerA(pos,s)
-        return lancerLoin(s)
+        else:
+            if jeDoisLancer(s):
+                return lancerLoin(s)
+            return avancerVolley(s)
 
 class Defense(Strategy):
     def __init__(self):

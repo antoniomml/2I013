@@ -295,10 +295,14 @@ def posDefense(s):
 
 def posAttaque(s):
     if s.id_team == 1:
+        if s.ballonApprox.x > GAME_WIDTH/2:
+            return Vector2D(GAME_WIDTH/2 - 5,s.ballonApprox.y)
         if s.ballonApprox.y > GAME_HEIGHT/2:
             return Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - (GAME_HEIGHT/4))
         return Vector2D(GAME_WIDTH/2 - GAME_WIDTH/8,GAME_HEIGHT - 3*(GAME_HEIGHT/4))
     if s.id_team == 2:
+        if s.ballonApprox.x < GAME_WIDTH/2:
+            return Vector2D(GAME_WIDTH/2 + 5,s.ballonApprox.y)
         if s.ballonApprox.y > GAME_HEIGHT/2:
             return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - (GAME_HEIGHT/4))
         return Vector2D(GAME_WIDTH - 3*(GAME_WIDTH/8),GAME_HEIGHT - 3*(GAME_HEIGHT/4))
@@ -321,16 +325,25 @@ def estDansMonTerrain(s):
 
 def jeDoisLancer(s):
     if s.id_team == 1:
-        if s.ballonApprox.x > GAME_WIDTH/2 - 5.:
+        if s.ballonApprox.x > GAME_WIDTH/2 - 10.:
             return True
         return False
     if s.id_team == 2:
-        if s.ballonApprox.x < GAME_WIDTH/2 + 5.:
+        if s.ballonApprox.x < GAME_WIDTH/2 + 10.:
             return True
         return False
+
+def forceL(distance,s):
+    if distance < 12:
+        return 2
+    if distance < 16:
+        return 2.5
+    else:
+        return 5
 
 def avancerVolley(s): #Avanza al centro dando pequenos toques al balon
     but = Vector2D(GAME_WIDTH/2,s.ballonApprox.y)
     v = but-s.joueurPos
-    vnorm = v.normalize()*2.5
+    d = s.joueurPos.distance(but)
+    vnorm = v.normalize()*forceL(d,s)
     return SoccerAction(vnorm,vnorm/2)

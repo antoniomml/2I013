@@ -16,7 +16,10 @@ class soloStrategy(Strategy):
             if estDansMonTerrain(s):
                 return allerA(s.ballonApprox,s)
             return allerA(pos,s)
-        return lancerLoin(s)
+        else:
+            if jeDoisLancer(s):
+                return lancerLoin(s)
+            return avancerVolley(s)
 
 # Create teams
 team1 = SoccerTeam(name="Team 1")
