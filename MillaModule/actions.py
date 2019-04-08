@@ -55,11 +55,8 @@ def adversairesProches(distance,s): #Devuelve una lista con los adversarios cerc
 def coequipierSeul(s): #Dice cual es el compañero de equipo que está mas alejado de los adversarios
     if s.nbCoequipiers == 1:
         return s.state.player_state(s.id_team,s.id_player)
-    if s.id_player == 0:
-        idsolo = 1
-    else:
-        idsolo = 0
-    for i in range(1,len(s.listeEquipe)):
+    idsolo = 0
+    for i in s.listeEquipe:
         if distanceAdvProche(i,s) > distanceAdvProche(idsolo,s):
             if i != s.id_player:
                 idsolo = i
@@ -77,6 +74,15 @@ def coequipierProche(s): #Dice cual es el compañero de equipo mas cercano
             if i != s.id_player:
                 idcerca = i
     return s.state.player_state(s.id_team,idcerca)
+
+def ennemiesAuMilieu(player,s):
+    d = distanceJoueur(player,s)
+    advProches = adversairesProches(d,s)
+    for i in advProches:
+        posAdv = i.position
+        if posAdv.distance(player.position) < distanceJoueur(player,s):
+            return True
+    return False
 
 def forceTir(distance,s): #Da la fuerza (valor por el que multiplicar el vector) del tiro
     if distance >= 60.:
@@ -98,13 +104,13 @@ def forcePasse(distance,s): #Da la fuerza (valor por el que multiplicar el vecto
     if distance >= 40.:
         return maxPlayerShoot
     if distance >= 30. and distance < 40:
-        return 5
-    if distance >= 20. and distance < 30:
-        return 4.5
-    if distance >= 5. and distance < 20:
         return 4
-    if distance < 5:
+    if distance >= 20. and distance < 30:
+        return 3.5
+    if distance >= 5. and distance < 20:
         return 3
+    if distance < 5:
+        return 2.5
 
 def lancerA(punto,s): #Lanza el balon a un punto en concreto
     v = punto-s.joueurPos
@@ -154,8 +160,19 @@ def passerAToi(s): #Pasa a si mismo el balon utilizando los muros
     cnorm = c.normalize()*maxPlayerAcceleration
     return SoccerAction(cnorm,pnorm)
 
+def jeDoisPasser(pos,s): #Devuelve si debe pasar el balon
+    #mate = coequipierSeul(s)
+    mate = s.coequipierPlusAvance
+    if distanceAdvProche(s.id_player,s)<10 and s.nbCoequipiers>1 and not ennemiesAuMilieu(mate,s):
+        return True
+    elif s.joueurPos.distance(pos) > 40:
+        return True
+    else:
+        return False
+
 def passer(s): #Da un pase al jugador mas solo
-    mate = coequipierSeul(s)
+    #mate = coequipierSeul(s)
+    mate = s.coequipierPlusAvance
     d = distanceJoueur(mate,s)
     p = mate.position-s.joueurPos
     pnorm = p.normalize()*forceTir(d,s)

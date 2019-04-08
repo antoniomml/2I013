@@ -193,6 +193,38 @@ class SuperState(object):
                 return Vector2D(self.ballonApprox.x,50.)
             return self.ballonApprox
 
+    @property
+    def posAttaquantStatique(self):
+        if self.id_team == 1:
+            return Vector2D(130,45)
+        if self.id_team == 2:
+            return Vector2D(20,45)
+
+    @property
+    def posMilieuStatique(self):
+        if self.id_team == 1:
+            return Vector2D(80,60)
+        if self.id_team == 2:
+            return Vector2D(60,30)
+
+    @property
+    def posDefenseurStatique(self):
+        if self.id_team == 1:
+            return Vector2D(30,35)
+        if self.id_team == 2:
+            return Vector2D(60,55)
+    
+
+    @property #Devuelve si eres el companero mas cercano al balon
+    def jeSuisProche(self):
+        moi = self.joueur
+        for i in self.listeEquipe:
+            play = self.state.player_state(self.id_team,i)
+            if distanceBallon(play,self) < distanceBallon(moi,self):
+                return False
+        return True
+    
+
     @property #Devuelve si hay un compañero muy cerca
     def estProcheCoequipier(self):
         d = coequipierProche(self).position.distance(self.joueurPos)
@@ -215,17 +247,10 @@ class SuperState(object):
             return True
         else:
             return False
-
-    @property #Devuelve si debe pasar el balon
-    def jeDoisPasser(self):
-        if distanceAdvProche(self.id_player,self) < 10. and self.nbCoequipiers > 1:
-            return True
-        else:
-            return False
    
     @property #Devuelve si debe pasar el balon a si mismo
     def jeDoisPasserAMoi(self):
-        if self.distanceMurProche < 30. and self.autreEstDevant:
+        if self.distanceMurProche < 25. and self.autreEstDevant:
             if self.distanceMurProche < distanceJoueur(coequipierProche(self),self):
                 return True
         return False
@@ -328,6 +353,19 @@ class SuperState(object):
                 if p.position.x > maxi.position.x:
                     maxi = p
             if self.equipeEnnemi == 2:
+                if p.position.x < maxi.position.x:
+                    maxi = p
+        return maxi
+
+    @property #Devuelve el companero mas avanzado
+    def coequipierPlusAvance(self):
+        maxi = self.joueur
+        for idplayer in self.listeEquipe:
+            p = self.state.player_state(self.id_team,idplayer)
+            if self.id_team == 1:
+                if p.position.x > maxi.position.x:
+                    maxi = p
+            if self.id_team == 2:
                 if p.position.x < maxi.position.x:
                     maxi = p
         return maxi

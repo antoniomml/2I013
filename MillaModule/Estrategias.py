@@ -64,7 +64,7 @@ class FonceurAmeliore(Strategy):
                 return tirer(maxPlayerShoot,s)
             elif s.jeDoisPasserAMoi:
                 return passerAToi(s)
-            elif s.jeDoisPasser:
+            elif jeDoisPasser(pos,s):
                 return passer(s)
             elif s.autreEstDevant:
                 return avancer(s)
@@ -112,7 +112,7 @@ class Defenseur(Strategy):
                 return tirer(maxPlayerShoot,s)
             elif s.jeDoisPasserAMoi:
                 return passerAToi(s)
-            elif s.jeDoisPasser:
+            elif jeDoisPasser(pos,s):
                 return passer(s)
             elif s.autreEstDevant:
                 return avancer(s)
@@ -139,7 +139,7 @@ class Attaquant(Strategy):
                 return tirer(maxPlayerShoot,s)
             elif s.jeDoisPasserAMoi:
                 return passerAToi(s)
-            elif s.jeDoisPasser:
+            elif jeDoisPasser(pos,s):
                 return passer(s)
             elif s.autreEstDevant:
                 return avancer(s)
@@ -166,7 +166,7 @@ class AttaquantDroit(Strategy):
                 return tirer(maxPlayerShoot,s)
             elif s.jeDoisPasserAMoi:
                 return passerAToi(s)
-            elif s.jeDoisPasser:
+            elif jeDoisPasser(pos,s):
                 return passer(s)
             elif s.autreEstDevant:
                 return avancer(s)
@@ -193,8 +193,93 @@ class AttaquantGauche(Strategy):
                 return tirer(maxPlayerShoot,s)
             elif s.jeDoisPasserAMoi:
                 return passerAToi(s)
-            elif s.jeDoisPasser:
+            elif jeDoisPasser(pos,s):
                 return passer(s)
+            elif s.autreEstDevant:
+                return avancer(s)
+            else:
+                return avancerVersBut(s)
+
+class AttaquantStatique(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"AttaquantStatique")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        pos = s.posAttaquantStatique
+        if s.ballon == Vector2D(75,45):
+            if not s.peutToucher:
+                return allerA(s.ballonApprox,s)
+            else:
+                return tirer(maxPlayerShoot,s)
+        if not s.peutToucher:
+            if s.jeSuisProche:
+                return allerA(s.ballonApprox,s)
+            return allerA(pos,s)
+        else:
+            if s.jeDoisTirer:
+                return tirer(4,s)
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif jeDoisPasser(pos,s):
+                return passer(s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
+            elif s.autreEstDevant:
+                return avancer(s)
+            else:
+                return avancerVersBut(s)
+
+class MilieuStatique(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"MilieuStatique")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        pos = s.posMilieuStatique
+        if s.ballon == Vector2D(75,45):
+            if not s.peutToucher:
+                return allerA(s.ballonApprox,s)
+            else:
+                return tirer(maxPlayerShoot,s)
+        if not s.peutToucher:
+            if s.jeSuisProche:
+                return allerA(s.ballonApprox,s)
+            return allerA(pos,s)
+        else:
+            if s.jeDoisTirer:
+                return tirer(4,s)
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif jeDoisPasser(pos,s):
+                return passer(s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
+            elif s.autreEstDevant:
+                return avancer(s)
+            else:
+                return avancerVersBut(s)
+
+class DefenseurStatique(Strategy):
+    def __init__(self):
+        Strategy.__init__(self,"DefenseurStatique")
+
+    def compute_strategy(self,state,id_team,id_player):
+        s = SuperState(state,id_team,id_player)
+        pos = s.posDefenseurStatique
+        if not s.peutToucher:
+            if s.jeSuisProche:
+                return allerA(s.ballonApprox,s)
+            return allerA(pos,s)
+        else:
+            if s.jeDoisTirer:
+                return tirer(4,s)
+            elif s.autrePeutTirer:
+                return tirer(maxPlayerShoot,s)
+            elif jeDoisPasser(pos,s):
+                return passer(s)
+            elif s.jeDoisPasserAMoi:
+                return passerAToi(s)
             elif s.autreEstDevant:
                 return avancer(s)
             else:
