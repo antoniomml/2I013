@@ -1,6 +1,7 @@
 from soccersimulator import Vector2D, SoccerAction
 from soccersimulator.settings import GAME_WIDTH, GAME_HEIGHT, PLAYER_RADIUS, BALL_RADIUS, maxPlayerAcceleration, maxPlayerShoot
 from MillaModule.actions import *
+import math
 
 class SuperState(object):
     def __init__(self,state,id_team,id_player):
@@ -26,6 +27,13 @@ class SuperState(object):
             return Vector2D(GAME_WIDTH,GAME_HEIGHT/2.)
         if self.id_team == 2:
             return Vector2D(0,GAME_HEIGHT/2.)
+
+    @property #Posicion de la porteria del equipo
+    def propreBut(self):
+        if self.id_team == 1:
+            return Vector2D(0,GAME_HEIGHT/2.)
+        if self.id_team == 2:
+            return Vector2D(GAME_WIDTH,GAME_HEIGHT/2.)
 
     @property #Distancia desde la que se puede tocar el balon
     def minDistanceBallon(self):
@@ -93,11 +101,11 @@ class SuperState(object):
             else:
                 return self.ballonApprox
 
-    @property #Posicion donde debe estar el portero
-    def posGardien(self):
+    @property #Posicion donde debe estar el portero ANTIGUA NO SE USA
+    def posGardienOld(self):
         if self.id_team == 1:
             if self.ballonApprox.y > 60.:
-                if self.ballon.x < 5.:
+                if self.ballonApprox.x < 5.:
                     return Vector2D(self.ballonApprox.x,60.)
                 return Vector2D(5.,60.)
             if self.ballonApprox.y < 30.:
@@ -119,6 +127,13 @@ class SuperState(object):
             if self.ballonApprox.x > GAME_WIDTH-10.:
                 return self.ballonApprox
             return Vector2D(GAME_WIDTH-10.,self.ballonApprox.y)
+
+    @property #Posicion donde debe estar el portero
+    def posGardien(self):
+        dMax = 10
+        A = (self.ballonApprox-self.propreBut)
+        A = A.normalize()*dMax + self.propreBut
+        return A
 
     @property #Posicion donde debe estar el defensa
     def posDefenseur(self):
