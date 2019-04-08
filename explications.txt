@@ -1,0 +1,64 @@
+MILLA LARA, Antonio Manuel
+
+TME SOLO - Explications
+
+Question 1:
+La Strategie Echauffement consiste en aller au ballon et quand il peut le toucher le passer au contraire.
+Il utilise les outils:
+-SuperState, deja implementé dans les cours.
+-Un methode peutToucher qui dit si un joueur peut toucher le ballon.
+-Un methode allerA qui fait l'action de aller une position donné.
+-Un methode passerAuContraire qui selectione un adversaire aleatoirement et il lance le ballon.
+
+Question 2:
+La Strategie Attaque consiste en aller au ballon et quand il peut le toucher le lancer le plus loin posible du adversaire.
+Il utilise les outils:
+-SuperState, deja implementé dans les cours.
+-Un methode peutToucher qui dit si un joueur peut toucher le ballon.
+-Un methode allerA qui fait l'action de aller une position donné.
+-Un methode lancerLoin qui selectione un adversaire aleatoirement et il divise le Terraine ennemi dans quatre parts. Selon ou est le adversaire il lance le ballon dans la part plus distant.
+
+Question 3:
+La Strategie Defense consiste en aller dans la position plus loine de mon coequipier. Si le ballon est proche il va a le prendre. Et quand il peut le toucher le lancer le plus loin posible du adversaire.
+Il utilise les outils:
+-SuperState, deja implementé dans les cours.
+-Un methode posDefense qui retourne la position a laquelle il doit aller pour defendre.
+-Un methode peutToucher qui dit si un joueur peut toucher le ballon.
+-Un methode jeSuisProche qui retourne si on est proche du ballon.
+-Un methode allerA qui fait l'action de aller une position donné.
+-Un methode lancerLoin qui selectione un adversaire aleatoirement et il divise le Terraine ennemi dans quatre parts. Selon ou est le adversaire il lance le ballon dans la part plus distant.
+
+Question 4:
+La Strategie 1vs1 est soloStrategy consiste en aller dans une position central. Et quand le ballon viens dans son terrain il va le prendre. Et quand il peut le toucher le lancer le plus loin posible du adversaire.
+Il utilise les outils:
+-SuperState, deja implementé dans les cours.
+-Un methode posCentral qui retourne la position a laquelle il doit aller pour defendre.
+-Un methode peutToucher qui dit si un joueur peut toucher le ballon.
+-Un methode estDansMonTerrain qui dit si le ballon est dans mon terrain.
+-Un methode allerA qui fait l'action de aller une position donné.
+-Un methode jeDoisLancer qui dit quand on doit lancer pour avancer le plus posible.
+-Un methode lancerLoin qui selectione un adversaire aleatoirement et il divise le Terraine ennemi dans quatre parts. Selon ou est le adversaire il lance le ballon dans la part plus distant.
+-Un methode avancerVolley qui avance jusqu'au milieu du Terrain pour maximiser le tir.
+
+Question 5:
+La Strategie 2vs2 est un Attaquant avec la strategie Attaque (mais ameliore) et un Defenseur avec la strategie Defense (aussi ameliore)
+Il utilise les outils:
+-SuperState, deja implementé dans les cours.
+-Un methode posAttaque et posDefense qui retourne la position a laquelle il doit aller pour defendre.
+-Un methode peutToucher qui dit si un joueur peut toucher le ballon.
+-Un methode jeSuisProche qui retourne si on est proche du ballon.
+-Un methode estDansMonTerrain qui dit si le ballon est dans mon terrain.
+-Un methode allerA qui fait l'action de aller une position donné.
+-Un methode jeDoisLancer qui dit quand on doit lancer pour avancer le plus posible.
+-Un methode lancerLoin qui selectione un adversaire aleatoirement et il divise le Terraine ennemi dans quatre parts. Selon ou est le adversaire il lance le ballon dans la part plus distant.
+-Un methode avancerVolley qui avance jusqu'au milieu du Terrain pour maximiser le tir.
+
+Question 6:
+Dans cet question j'ai essaie de ameliorer la force avec on fait le passe a nous memes pour optimiser le tir.
+
+J'ai utilisé une recherche en grille ou j'essaie avec la force 2,3,4,5
+
+Pour faire ça j'ai modifie le outil de Simulation.py pour le faire compatible avec le volleyball
+
+J'ai obtenu que le mieux resultat est avec une force de 4 pour une distance de 30 jusqu'au milieu.
+

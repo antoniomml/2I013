@@ -347,3 +347,13 @@ def avancerVolley(s): #Avanza al centro dando pequenos toques al balon
     d = s.joueurPos.distance(but)
     vnorm = v.normalize()*forceL(d,s)
     return SoccerAction(vnorm,vnorm/2)
+
+def avancerVolleyParam(s,force=0): #Avanza al centro dando pequenos toques al balon
+    but = Vector2D(GAME_WIDTH/2,s.ballonApprox.y)
+    v = but-s.joueurPos
+    d = s.joueurPos.distance(but)
+    if force == 0:
+        vnorm = v.normalize()*forceL(d,s)
+    else:
+        vnorm = v.normalize()*force
+    return SoccerAction(vnorm,vnorm/2)
