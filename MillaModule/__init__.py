@@ -17,8 +17,8 @@ def get_team ( nb_players ):
         team.add("Gardien",Gardien())
         team.add("Defenseur",Defenseur())
     if nb_players == 4:
-        team.add("Defenseur",Defenseur())
+        team.add("Defenseur",DefenseurStatique())
         team.add("Gardien",Gardien())
-        team.add("AttaquantD",AttaquantDroit())
-        team.add("AttaquantG",AttaquantGauche())
+        team.add("Attaquant",AttaquantStatique())
+        team.add("Milieu",MilieuStatique())
     return team

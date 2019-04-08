@@ -212,7 +212,7 @@ class SuperState(object):
         if self.id_team == 1:
             return Vector2D(30,35)
         if self.id_team == 2:
-            return Vector2D(60,55)
+            return Vector2D(120,55)
     
 
     @property #Devuelve si eres el companero mas cercano al balon
