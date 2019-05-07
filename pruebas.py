@@ -28,7 +28,7 @@ class Pasador(Strategy):
             return allerA(s.ballon,s)
 
 expe = GoalSearch(Tirador(),params={'strength':[3,4,5,0]}) #max=6
-expe.start() #expe.start(False) no muestra el partido
+expe.start(False) #expe.start(False) no muestra el partido
 print(expe.get_res())
 print(expe.get_best())
 
